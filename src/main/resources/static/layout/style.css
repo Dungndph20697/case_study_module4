@@ -1,126 +1,111 @@
+/* ===============================
+   STYLE CHUNG CHO TOÀN BỘ WEBSITE
+   =============================== */
 
+/* Reset & Font */
 body {
-    box-sizing: border-box;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
 
-.page-section {
-    min-height: 100vh;
-    padding: 40px 0;
-    border-bottom: 3px solid #fff;
+/* Tiêu đề trang */
+.page-title h1 {
+    font-size: 2rem;
+    color: #343a40;
 }
 
-.page-title {
-    background: rgba(255,255,255,0.1);
-    color: white;
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    text-align: center;
-    backdrop-filter: blur(10px);
+.page-title p {
+    color: #6c757d;
 }
 
-.login-card {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    overflow: hidden;
-}
-
-.dashboard-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-radius: 12px;
-    margin-bottom: 20px;
-}
-
-.sidebar {
-    background: #f8f9fa;
-    border-radius: 12px;
-    border: 1px solid #dee2e6;
-    padding: 20px;
-}
-
-.nav-link {
-    color: #495057;
-    border-radius: 8px;
-    margin: 2px 0;
-    transition: all 0.3s ease;
-}
-
-.nav-link:hover, .nav-link.active {
-    background: #667eea;
-    color: white;
-}
-
+/* Card chung */
 .card {
-    border: none;
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-    margin-bottom: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 .card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
-.stats-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.stats-card-green {
-    background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
-}
-
-.stats-card-orange {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-}
-
-.stats-card-purple {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
-
-.room-card {
-    border-left: 4px solid #667eea;
-}
-
-.room-available {
-    border-left-color: #28a745;
-}
-
-.room-occupied {
-    border-left-color: #dc3545;
-}
-
-.room-maintenance {
-    border-left-color: #ffc107;
-}
-
-.btn-custom {
+/* Nút */
+.btn {
     border-radius: 8px;
     font-weight: 500;
-    transition: all 0.3s ease;
 }
 
-.table th {
-    background: #f8f9fa;
-    border: none;
-    font-weight: 600;
-    color: #495057;
+/* Sidebar */
+.sidebar {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    height: 100%;
+}
+.sidebar .nav-link {
+    color: #333;
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.sidebar .nav-link:hover {
+    background: #e9ecef;
+    color: #007bff;
+}
+.sidebar .nav-link i {
+    color: #6c757d;
 }
 
-.badge-custom {
-    font-size: 0.75rem;
-    padding: 0.5em 0.75em;
+/* Footer */
+footer {
+    font-size: 0.9rem;
 }
 
-.content-wrapper {
-    background: white;
+/* Login Page */
+#login-page .card {
     border-radius: 15px;
-    padding: 30px;
-    margin: 20px 0;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+#login-page .btn-custom {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+#login-page .btn-custom:hover {
+    opacity: 0.9;
+}
+
+/* Dashboard Boxes */
+.card-body h3 {
+    font-size: 2rem;
+}
+
+/* Table */
+.table th {
+    font-weight: 600;
+}
+.table td {
+    vertical-align: middle;
+}
+
+/* Alerts */
+.alert {
+    border-radius: 10px;
+}
+
+/* Custom Scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        margin-bottom: 20px;
+    }
 }

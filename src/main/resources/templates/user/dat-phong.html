@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="layout/layout :: layout(~{::body})">
+<body>
+<section id="dat-phong" class="py-4">
+    <div class="container-fluid">
+        <div class="page-title text-center mb-4">
+            <h1 class="fw-bold"><i class="bi bi-calendar-plus me-2"></i>ĐẶT PHÒNG KHÁCH SẠN</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3" th:replace="fragments/sidebar-user :: sidebar-user"></div>
+            <div class="col-md-9">
+                <form class="card shadow-sm p-4" th:action="@{/user/dat-phong}" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Ngày đến</label>
+                            <input type="date" name="ngayDen" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Ngày đi</label>
+                            <input type="date" name="ngayDi" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Chọn loại phòng</label>
+                        <select class="form-select" name="loaiPhong">
+                            <option value="don">Phòng đơn</option>
+                            <option value="doi">Phòng đôi</option>
+                            <option value="vip">Phòng VIP</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ghi chú</label>
+                        <textarea class="form-control" name="ghiChu" rows="3" placeholder="Yêu cầu thêm..."></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle"></i> Xác nhận đặt phòng
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

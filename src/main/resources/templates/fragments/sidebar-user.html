@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="sidebar-user">
+    <div class="sidebar p-3 bg-light rounded shadow-sm">
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" th:href="@{/user/bang-dieu-khien}"><i class="bi bi-house-heart me-2"></i>Trang chủ</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/user/dat-phong}"><i class="bi bi-calendar-plus me-2"></i>Đặt phòng</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/user/lich-su}"><i class="bi bi-clock-history me-2"></i>Lịch sử</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/user/thong-tin}"><i class="bi bi-person-circle me-2"></i>Thông tin cá nhân</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

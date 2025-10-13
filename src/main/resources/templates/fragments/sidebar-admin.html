@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="sidebar-admin">
+    <div class="sidebar p-3 bg-light rounded shadow-sm">
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin/bang-dieu-khien}"><i class="bi bi-speedometer2 me-2"></i>Tổng quan</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin/quan-ly-phong}"><i class="bi bi-house me-2"></i>Quản lý phòng</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin/quan-ly-dat-phong}"><i class="bi bi-calendar-check me-2"></i>Quản lý đặt phòng</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin/quan-ly-nguoi-dung}"><i class="bi bi-people me-2"></i>Người dùng</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin/trang-thai-phong}"><i class="bi bi-house-check me-2"></i>Trạng thái phòng</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/admin/bao-cao}"><i class="bi bi-graph-up me-2"></i>Báo cáo</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="layout/layout :: layout(~{::body})">
+<body>
+<section id="staff-dashboard" class="py-4">
+    <div class="container-fluid">
+        <div class="page-title text-center mb-4">
+            <h1 class="fw-bold"><i class="bi bi-person-badge me-2"></i>BẢNG ĐIỀU KHIỂN NHÂN VIÊN</h1>
+            <p class="lead">Trang làm việc cho nhân viên khách sạn</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3" th:replace="fragments/sidebar-staff :: sidebar-staff"></div>
+            <div class="col-md-9">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="bi bi-calendar-check display-5 text-primary"></i>
+                                <h5 class="mt-2">Đặt phòng hôm nay</h5>
+                                <p class="lead mb-0">12</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="bi bi-house-check display-5 text-success"></i>
+                                <h5 class="mt-2">Phòng đang ở</h5>
+                                <p class="lead mb-0">25</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a th:href="@{/staff/quan-ly-dat-phong}" class="btn btn-primary me-2">
+                        <i class="bi bi-calendar-plus"></i> Quản lý đặt phòng
+                    </a>
+                    <a th:href="@{/staff/trang-thai-phong}" class="btn btn-success">
+                        <i class="bi bi-door-open"></i> Xem trạng thái phòng
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
