@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Booking System - Complete</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!--    <link href="/layout/style.css" rel="stylesheet">-->
+    <link th:href="@{/layout/style.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+    <!-- ==================== TRANG QUẢN LÝ PHÒNG ==================== -->
+    <section class="page-section" id="room-management">
+        <div class="container">
+            <div class="page-title">
+                <h1 class="display-4 fw-bold mb-0">
+                    <i class="bi bi-house me-3"></i>QUẢN LÝ PHÒNG
+                </h1>
+                <p class="lead mb-0">Quản lý thông tin và trạng thái các phòng</p>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold">Danh sách phòng</h2>
+                    <button class="btn btn-primary btn-custom">
+                        <i class="bi bi-plus-circle me-2"></i>Thêm phòng mới
+                    </button>
+                </div>
+
+                <!-- Room Statistics -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="card-body text-center">
+                                <i class="bi bi-house display-6 mb-2"></i>
+                                <h4 class="fw-bold">25</h4>
+                                <p class="mb-0">Tổng phòng</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card-green">
+                            <div class="card-body text-center">
+                                <i class="bi bi-check-circle display-6 mb-2"></i>
+                                <h4 class="fw-bold">18</h4>
+                                <p class="mb-0">Phòng trống</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card-orange">
+                            <div class="card-body text-center">
+                                <i class="bi bi-person-fill display-6 mb-2"></i>
+                                <h4 class="fw-bold">5</h4>
+                                <p class="mb-0">Đã thuê</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card-purple">
+                            <div class="card-body text-center">
+                                <i class="bi bi-tools display-6 mb-2"></i>
+                                <h4 class="fw-bold">2</h4>
+                                <p class="mb-0">Bảo trì</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Room Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Số phòng</th>
+                                    <th>Loại phòng</th>
+                                    <th>Giá/đêm</th>
+                                    <th>Trạng thái</th>
+                                    <th>Mô tả</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="fw-semibold">101</td>
+                                    <td>Standard</td>
+                                    <td>500,000đ</td>
+                                    <td><span class="badge bg-success badge-custom">Trống</span></td>
+                                    <td>Phòng đơn, 1 giường</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">102</td>
+                                    <td>Standard</td>
+                                    <td>500,000đ</td>
+                                    <td><span class="badge bg-danger badge-custom">Đã thuê</span></td>
+                                    <td>Phòng đơn, 1 giường</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">201</td>
+                                    <td>Deluxe</td>
+                                    <td>800,000đ</td>
+                                    <td><span class="badge bg-success badge-custom">Trống</span></td>
+                                    <td>Phòng đôi, 2 giường</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">202</td>
+                                    <td>Deluxe</td>
+                                    <td>800,000đ</td>
+                                    <td><span class="badge bg-warning badge-custom">Bảo trì</span></td>
+                                    <td>Phòng đôi, 2 giường</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">301</td>
+                                    <td>Suite</td>
+                                    <td>1,200,000đ</td>
+                                    <td><span class="badge bg-success badge-custom">Trống</span></td>
+                                    <td>Phòng VIP, phòng khách riêng</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">302</td>
+                                    <td>Suite</td>
+                                    <td>1,200,000đ</td>
+                                    <td><span class="badge bg-danger badge-custom">Đã thuê</span></td>
+                                    <td>Phòng VIP, phòng khách riêng</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
