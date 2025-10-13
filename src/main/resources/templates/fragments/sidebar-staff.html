@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="sidebar-staff">
+    <div class="sidebar p-3 bg-light rounded shadow-sm">
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" th:href="@{/staff/bang-dieu-khien}"><i class="bi bi-speedometer2 me-2"></i>Tổng quan</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/staff/quan-ly-dat-phong}"><i class="bi bi-calendar-check me-2"></i>Đặt phòng</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/staff/checkin-out}"><i class="bi bi-key me-2"></i>Check-in/out</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/staff/trang-thai-phong}"><i class="bi bi-house-check me-2"></i>Trạng thái phòng</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="layout/layout :: layout(~{::body})">
+<body>
+<section id="quan-ly-phong" class="py-4">
+    <div class="container-fluid">
+        <div class="page-title text-center mb-4">
+            <h1 class="fw-bold"><i class="bi bi-house me-2"></i>QUẢN LÝ PHÒNG</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3" th:replace="fragments/sidebar-admin :: sidebar-admin"></div>
+            <div class="col-md-9">
+                <table class="table table-hover shadow-sm">
+                    <thead class="table-primary">
+                    <tr>
+                        <th>Mã phòng</th>
+                        <th>Loại phòng</th>
+                        <th>Giá (VNĐ)</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="p : ${listPhong}">
+                        <td th:text="${p.maPhong}">101</td>
+                        <td th:text="${p.loaiPhong}">Phòng đơn</td>
+                        <td th:text="${p.gia}">500000</td>
+                        <td><span class="badge bg-success">Còn trống</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <a href="#" class="btn btn-primary mt-3"><i class="bi bi-plus-circle"></i> Thêm phòng</a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="layout/layout :: layout(~{::body})">
+<body>
+<section id="login-page" class="py-5">
+    <div class="container">
+        <div class="page-title text-center mb-5">
+            <h1 class="display-5 fw-bold mb-0">
+                <i class="bi bi-door-open-fill me-3"></i>TRANG ĐĂNG NHẬP
+            </h1>
+            <p class="lead mb-0">Hệ thống quản lý khách sạn</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                    <div class="card-header text-center py-4 text-white"
+                         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <h2 class="mb-0"><i class="bi bi-building"></i> Hotel Booking</h2>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <form th:action="@{/login}" method="post">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Tài khoản</label>
+                                <input type="text" name="username" class="form-control"
+                                       placeholder="Nhập tài khoản..." required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Mật khẩu</label>
+                                <input type="password" name="password" class="form-control"
+                                       placeholder="Nhập mật khẩu..." required>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>Đăng nhập
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card-footer text-center py-3 bg-light">
+                        <small>Bạn chưa có tài khoản? <a th:href="@{/register}" class="fw-semibold">Đăng ký ngay</a></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

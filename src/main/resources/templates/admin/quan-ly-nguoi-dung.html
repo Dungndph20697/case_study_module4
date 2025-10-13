@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="layout/layout :: layout(~{::body})">
+<body>
+<section id="quan-ly-nguoi-dung" class="py-4">
+    <div class="container-fluid">
+        <div class="page-title text-center mb-4">
+            <h1 class="fw-bold"><i class="bi bi-people me-2"></i>QUẢN LÝ NGƯỜI DÙNG</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3" th:replace="fragments/sidebar-admin :: sidebar-admin"></div>
+            <div class="col-md-9">
+                <table class="table table-bordered table-hover shadow-sm">
+                    <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên đăng nhập</th>
+                        <th>Email</th>
+                        <th>Vai trò</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>admin01</td>
+                        <td>admin@gmail.com</td>
+                        <td><span class="badge bg-danger">ADMIN</span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>user01</td>
+                        <td>user@gmail.com</td>

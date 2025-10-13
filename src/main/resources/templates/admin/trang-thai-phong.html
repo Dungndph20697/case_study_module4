@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="layout/layout :: layout(~{::body})">
+<body>
+<section id="trang-thai-phong" class="py-4">
+    <div class="container-fluid">
+        <div class="page-title text-center mb-4">
+            <h1 class="fw-bold"><i class="bi bi-house-check me-2"></i>TRẠNG THÁI PHÒNG</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3" th:replace="fragments/sidebar-admin :: sidebar-admin"></div>
+            <div class="col-md-9">
+                <div class="row g-3">
+                    <div class="col-md-3" th:each="p : ${listPhong}">
+                        <div class="card text-center border-0 shadow-sm">
+                            <div class="card-body">
+                                <h5 th:text="'Phòng ' + ${p.maPhong}">Phòng 101</h5>
+                                <span class="badge bg-success">Còn trống</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
