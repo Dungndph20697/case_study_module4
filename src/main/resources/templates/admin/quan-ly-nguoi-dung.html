@@ -9,24 +9,185 @@
 
         <div class="row">
             <div class="col-md-3" th:replace="fragments/sidebar-admin :: sidebar-admin"></div>
-            <div class="col-md-9">
-                <table class="table table-bordered table-hover shadow-sm">
-                    <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Tên đăng nhập</th>
-                        <th>Email</th>
-                        <th>Vai trò</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>admin01</td>
-                        <td>admin@gmail.com</td>
-                        <td><span class="badge bg-danger">ADMIN</span></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>user01</td>
-                        <td>user@gmail.com</td>
+            <!--            <div class="col-md-9">-->
+            <!--                <table class="table table-bordered table-hover shadow-sm">-->
+            <!--                    <thead class="table-light">-->
+            <!--                    <tr>-->
+            <!--                        <th>ID</th>-->
+            <!--                        <th>Tên đăng nhập</th>-->
+            <!--                        <th>Email</th>-->
+            <!--                        <th>Vai trò</th>-->
+            <!--                    </tr>-->
+            <!--                    </thead>-->
+            <!--                    <tbody>-->
+            <!--                    <tr>-->
+            <!--                        <td>1</td>-->
+            <!--                        <td>admin01</td>-->
+            <!--                        <td>admin@gmail.com</td>-->
+            <!--                        <td><span class="badge bg-danger">ADMIN</span></td>-->
+            <!--                    </tr>-->
+            <!--                    <tr>-->
+            <!--                        <td>2</td>-->
+            <!--                        <td>user01</td>-->
+            <!--                        <td>user@gmail.com</td>-->
+            <!--                        <td><span class="badge bg-primary">USER</span></td>-->
+            <!--                    </tr>-->
+            <!--                    </tbody>-->
+            <!--                </table>-->
+            <!--            </div>-->
+            <div class="content-wrapper">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold">Danh sách người dùng</h2>
+                    <button class="btn btn-primary btn-custom">
+                        <i class="bi bi-person-plus me-2"></i>Thêm người dùng
+                    </button>
+                </div>
+
+                <!-- User Statistics -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <div class="card stats-card">
+                            <div class="card-body text-center">
+                                <i class="bi bi-crown display-6 mb-2"></i>
+                                <h4 class="fw-bold">2</h4>
+                                <p class="mb-0">Quản trị viên</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card stats-card-green">
+                            <div class="card-body text-center">
+                                <i class="bi bi-person-badge display-6 mb-2"></i>
+                                <h4 class="fw-bold">8</h4>
+                                <p class="mb-0">Nhân viên</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card stats-card-orange">
+                            <div class="card-body text-center">
+                                <i class="bi bi-person display-6 mb-2"></i>
+                                <h4 class="fw-bold">156</h4>
+                                <p class="mb-0">Khách hàng</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên</th>
+                                    <th>Tài khoản</th>
+                                    <th>Email</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Vai trò</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="fw-semibold">1</td>
+                                    <td>Quản trị viên</td>
+                                    <td>admin</td>
+                                    <td>admin@hotel.com</td>
+                                    <td>0901234567</td>
+                                    <td><span class="badge bg-danger badge-custom">Admin</span></td>
+                                    <td><span class="badge bg-success">Hoạt động</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">2</td>
+                                    <td>Nhân viên A</td>
+                                    <td>staff</td>
+                                    <td>staff@hotel.com</td>
+                                    <td>0912345678</td>
+                                    <td><span class="badge bg-info badge-custom">Nhân viên</span></td>
+                                    <td><span class="badge bg-success">Hoạt động</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">3</td>
+                                    <td>Khách hàng Demo</td>
+                                    <td>user</td>
+                                    <td>user@demo.com</td>
+                                    <td>0923456789</td>
+                                    <td><span class="badge bg-success badge-custom">Khách hàng</span></td>
+                                    <td><span class="badge bg-success">Hoạt động</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">4</td>
+                                    <td>Nguyễn Văn A</td>
+                                    <td>nguyenvana</td>
+                                    <td>nguyenvana@email.com</td>
+                                    <td>0934567890</td>
+                                    <td><span class="badge bg-success badge-custom">Khách hàng</span></td>
+                                    <td><span class="badge bg-success">Hoạt động</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">5</td>
+                                    <td>Trần Thị B</td>
+                                    <td>tranthib</td>
+                                    <td>tranthib@email.com</td>
+                                    <td>0945678901</td>
+                                    <td><span class="badge bg-success badge-custom">Khách hàng</span></td>
+                                    <td><span class="badge bg-warning">Tạm khóa</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success me-2">
+                                            <i class="bi bi-unlock"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

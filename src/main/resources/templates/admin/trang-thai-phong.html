@@ -11,11 +11,172 @@
             <div class="col-md-3" th:replace="fragments/sidebar-admin :: sidebar-admin"></div>
             <div class="col-md-9">
                 <div class="row g-3">
-                    <div class="col-md-3" th:each="p : ${listPhong}">
-                        <div class="card text-center border-0 shadow-sm">
-                            <div class="card-body">
-                                <h5 th:text="'Phòng ' + ${p.maPhong}">Phòng 101</h5>
-                                <span class="badge bg-success">Còn trống</span>
+                    <!--                    <div class="col-md-3" th:each="p : ${listPhong}">-->
+                    <!--                        <div class="card text-center border-0 shadow-sm">-->
+                    <!--                            <div class="card-body">-->
+                    <!--                                <h5 th:text="'Phòng ' + ${p.maPhong}">Phòng 101</h5>-->
+                    <!--                                <span class="badge bg-success">Còn trống</span>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <div class="content-wrapper">
+                        <h2 class="mb-4 fw-bold">Trạng thái phòng</h2>
+
+                        <!-- Room Status Legend -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-success rounded me-2" style="width: 20px; height: 20px;"></div>
+                                    <span class="fw-semibold">Phòng trống</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-danger rounded me-2" style="width: 20px; height: 20px;"></div>
+                                    <span class="fw-semibold">Đã thuê</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-warning rounded me-2" style="width: 20px; height: 20px;"></div>
+                                    <span class="fw-semibold">Bảo trì</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-info rounded me-2" style="width: 20px; height: 20px;"></div>
+                                    <span class="fw-semibold">Dọn dẹp</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Room Cards -->
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card room-card room-available">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="fw-bold">Phòng 101</h5>
+                                                <p class="text-muted mb-0">Standard</p>
+                                            </div>
+                                            <span class="badge bg-success">Trống</span>
+                                        </div>
+                                        <p class="fw-bold text-primary mb-3">500,000đ/đêm</p>
+                                        <p class="small text-muted mb-3">Phòng đơn, 1 giường đôi, WiFi, TV</p>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-warning btn-sm">
+                                                <i class="bi bi-tools me-1"></i>Bảo trì
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card room-card room-occupied">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="fw-bold">Phòng 102</h5>
+                                                <p class="text-muted mb-0">Standard</p>
+                                            </div>
+                                            <span class="badge bg-danger">Đã thuê</span>
+                                        </div>
+                                        <p class="fw-bold text-primary mb-3">500,000đ/đêm</p>
+                                        <p class="small text-muted mb-3">Khách: Nguyễn Văn A<br>Check-out: 18/01/2024
+                                        </p>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-success btn-sm">
+                                                <i class="bi bi-check-circle me-1"></i>Đánh dấu trống
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card room-card room-maintenance">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="fw-bold">Phòng 202</h5>
+                                                <p class="text-muted mb-0">Deluxe</p>
+                                            </div>
+                                            <span class="badge bg-warning">Bảo trì</span>
+                                        </div>
+                                        <p class="fw-bold text-primary mb-3">800,000đ/đêm</p>
+                                        <p class="small text-muted mb-3">Sửa chữa điều hòa<br>Dự kiến: 2 ngày</p>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-success btn-sm">
+                                                <i class="bi bi-check-circle me-1"></i>Hoàn thành bảo trì
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card room-card room-available">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="fw-bold">Phòng 201</h5>
+                                                <p class="text-muted mb-0">Deluxe</p>
+                                            </div>
+                                            <span class="badge bg-success">Trống</span>
+                                        </div>
+                                        <p class="fw-bold text-primary mb-3">800,000đ/đêm</p>
+                                        <p class="small text-muted mb-3">Phòng đôi, 2 giường đơn, Ban công</p>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-warning btn-sm">
+                                                <i class="bi bi-tools me-1"></i>Bảo trì
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card room-card room-available">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="fw-bold">Phòng 301</h5>
+                                                <p class="text-muted mb-0">Suite</p>
+                                            </div>
+                                            <span class="badge bg-success">Trống</span>
+                                        </div>
+                                        <p class="fw-bold text-primary mb-3">1,200,000đ/đêm</p>
+                                        <p class="small text-muted mb-3">Phòng VIP, Phòng khách riêng</p>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-warning btn-sm">
+                                                <i class="bi bi-tools me-1"></i>Bảo trì
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card room-card room-occupied">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="fw-bold">Phòng 302</h5>
+                                                <p class="text-muted mb-0">Suite</p>
+                                            </div>
+                                            <span class="badge bg-danger">Đã thuê</span>
+                                        </div>
+                                        <p class="fw-bold text-primary mb-3">1,200,000đ/đêm</p>
+                                        <p class="small text-muted mb-3">Khách: Phạm Thị D<br>Check-out: 19/01/2024</p>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-success btn-sm">
+                                                <i class="bi bi-check-circle me-1"></i>Đánh dấu trống
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
