@@ -141,7 +141,43 @@
         const checkInDate = $("#ngayDen").val();
         const checkOutDate = $("#ngayDi").val();
         const note = $("#ghiChu").val();
-        const room = 1;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // bỏ phần giờ phút giây để so sánh đúng ngày
+
+        const inDate = new Date(checkInDate);
+        const outDate = new Date(checkOutDate);
+
+        if (!checkInDate || !checkOutDate) {
+            Swal.fire({
+                title: 'Thiếu thông tin!',
+                text: 'Vui lòng chọn ngày đến và ngày đi.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        if (inDate < today) {
+            Swal.fire({
+                title: 'Ngày đến không hợp lệ!',
+                text: 'Ngày đến không được nhỏ hơn ngày hiện tại.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        if (outDate <= inDate) {
+            Swal.fire({
+                title: 'Ngày đi không hợp lệ!',
+                text: 'Ngày đi phải lớn hơn ngày đến.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+
         if (!window.selectedRoomId) {
             Swal.fire({
                 title: 'Error!',

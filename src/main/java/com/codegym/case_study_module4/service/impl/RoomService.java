@@ -18,8 +18,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public List<Room> findAll() {
-        Sort sort = Sort.by("id").ascending().descending();
-        return roomRepository.findAll(sort);
+        return roomRepository.findAll();
     }
 
     @Override

@@ -11,14 +11,14 @@
             <div class="col-md-3" th:replace="fragments/sidebar-admin :: sidebar-admin"></div>
 
             <div class="content-wrapper">
-<!--                <div class="d-flex justify-content-between align-items-center mb-4">-->
-<!--                    <h2 class="fw-bold">Danh sách đặt phòng</h2>-->
-<!--                    <div>-->
-<!--                        <button class="btn btn-success btn-custom me-2">-->
-<!--                            <i class="bi bi-download me-2"></i>Xuất Excel-->
-<!--                        </button>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <!--                <div class="d-flex justify-content-between align-items-center mb-4">-->
+                <!--                    <h2 class="fw-bold">Danh sách đặt phòng</h2>-->
+                <!--                    <div>-->
+                <!--                        <button class="btn btn-success btn-custom me-2">-->
+                <!--                            <i class="bi bi-download me-2"></i>Xuất Excel-->
+                <!--                        </button>-->
+                <!--                    </div>-->
+                <!--                </div>-->
 
                 <!-- Booking Statistics -->
                 <div class="row g-4 mb-4">
@@ -81,7 +81,8 @@
                     <h5 class="modal-title" id="modalLabel">
                         <i class="bi bi-info-circle me-2"></i> Chi tiết đặt phòng
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Đóng"></button>
                 </div>
                 <div class="modal-body p-4">
                     <input type="hidden" id="id">
@@ -112,6 +113,16 @@
                         <div class="col-md-6">
                             <p><strong>Ngày trả phòng:</strong> <span id="checkOut"></span></p>
                         </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Số đêm:</strong> <span id="soDem"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Tổng tiền:</strong> <span id="tongTien"></span></p>
+                        </div>
+
                     </div>
 
                     <div class="mb-3">
@@ -121,8 +132,11 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"  aria-label="Xác nhận">Xác nhận</button>
-                    <button type="button" class="btn btn-secondary"  aria-label="Huỷ">Huỷ</button>
+                    <button type="button" class="btn btn-success" aria-label="Xác nhận" onclick="btnXacNhan(1)">Xác
+                        nhận
+                    </button>
+                    <button type="button" class="btn btn-danger" aria-label="Huỷ" onclick="btnXacNhan(2)">Huỷ
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
@@ -144,20 +158,43 @@
 <script>
     const modalDetail = new bootstrap.Modal(document.getElementById('exampleModal'), {})
 
+    function btnXacNhan(status) {
+        const id = $("#id").val();
+        console.log(id);
+        $.ajax({
+            type: "PUT",
+            url: `/admin/bookings/change-staus/${id}?status=${status}`,
+            success: function (b) {
+                modalDetail.hide();
+                loadBookings();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: 'Cập nhật trạng thái đặt phòng thành công!',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        });
+        modalDetail.show();
+    }
+
     function showMoalDetail(id) {
         $.ajax({
             type: "GET",
             url: `/admin/bookings/get-booking/${id}`,
             success: function (b) {
-                // document.getElementById("numberRoomUpdate").value = r.numberRoom;
-                // document.getElementById("typeUpdate").value = r.typeRoom;
-                // document.getElementById("priceUpdate").value = r.price;
-                $("#code").html(b.code)
+                const nights = computeNights(b.checkInDate, b.checkOutDate);
+                let total = '';
+                if (nights && b.room.price) {
+                    total = new Intl.NumberFormat('vi-VN').format(nights * b.room.price) + 'đ';
+                }
                 $("#id").val(b.id)
+                $("#code").html(b.code)
                 $("#roomNumber").html(b.room.numberRoom)
                 $("#note").html(b.note)
-                $("#checkOut").html(b.checkOutDate)
-                $("#checkIn").html(b.checkInDate)
+                $("#checkOut").html(formatDateTime( b.checkOutDate))
+                $("#checkIn").html(formatDateTime(b.checkInDate))
                 $("#CCCD").html(b.user.citizenIdNumber)
                 $("#email").html(b.user.email)
                 $("#username").html(b.user.username)
@@ -165,6 +202,8 @@
                 $("#price").html(b.room.price)
                 $("#typeRoom").html(b.room.typeRoom)
                 $("#phone").html(b.user.phoneNumber)
+                $("#soDem").html(nights)
+                $("#tongTien").html(total)
             }
         });
         modalDetail.show();
@@ -216,9 +255,9 @@
 
                 bookings.forEach(function (b) {
                     // b is a Booking entity. Use nested fields safely.
-                    const checkIn = b.checkInDate;
-                    const checkOut = b.checkOutDate;
-                    const nights = computeNights(checkIn, checkOut);
+                    const checkIn = formatDateTime(b.checkInDate);
+                    const checkOut = formatDateTime(b.checkOutDate);
+                    const nights = computeNights(b.checkInDate, b.checkOutDate);
                     // room price may be nested under b.room.price
                     const roomPrice = (b.room && b.room.price) ? b.room.price : null;
                     let total = '';
@@ -233,14 +272,14 @@
                             <td class="fw-semibold">${b.code ? b.code : ('#' + (b.id || ''))}</td>
                             <td>${userName}</td>
                             <td>${roomNumber}</td>
-                            <td>${checkIn ? checkIn : ''}</td>
-                            <td>${checkOut ? checkOut : ''}</td>
+                            <td>${checkIn}</td>
+                            <td>${checkOut}</td>
                             <td>${nights}</td>
                             <td class="fw-bold text-success">${total}</td>
                             <td>${statusBadge(b.status)}</td>
                             <td>
                                 <button class="btn btn-sm btn-outline-info me-1" onclick="showMoalDetail(${b.id})"><i class="bi bi-eye"></i></button>
-                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+<!--                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>-->
                             </td>
                         </tr>`;
                 });
@@ -259,6 +298,21 @@
                 $('#bookingContent').html('<div class="alert alert-danger">Không thể tải dữ liệu đặt phòng.</div>');
             }
         });
+    }
+
+    function formatDateTime(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        if (isNaN(date)) return dateString; // nếu lỗi parse thì trả lại nguyên bản
+
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${hours}:${minutes}:${seconds}, ${year}/${month}/${day}`;
     }
 
     $(document).ready(function () {

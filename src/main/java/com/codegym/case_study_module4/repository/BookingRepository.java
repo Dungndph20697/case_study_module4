@@ -16,4 +16,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Modifying
     @Query("delete from Booking b where b.user.id = :userId")
     void deleteByUserId(@Param("userId") Long userId);
+
 }

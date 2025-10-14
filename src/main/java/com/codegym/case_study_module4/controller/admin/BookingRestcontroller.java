@@ -2,12 +2,10 @@ package com.codegym.case_study_module4.controller.admin;
 
 import com.codegym.case_study_module4.model.Booking;
 import com.codegym.case_study_module4.service.IBookingService;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,5 +27,13 @@ public class BookingRestcontroller {
     public ResponseEntity<Booking> getAllBookings(@PathVariable Long id) {
         Optional<Booking> booking = bookingService.findById(id);
         return ResponseEntity.ok(booking.get());
+    }
+
+    @PutMapping("/bookings/change-staus/{id}")
+    public ResponseEntity<Booking> getAllBookings(@PathVariable Long id, @RequestParam("status") Integer status) {
+        Optional<Booking> booking = bookingService.findById(id);
+        booking.get().setStatus(status);
+        booking.get().setId(id);
+        return ResponseEntity.ok(bookingService.save(booking.get()));
     }
 }

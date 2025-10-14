@@ -42,16 +42,19 @@ public class UserRestController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Users user = (Users) authentication.getPrincipal();
         Long userId = user.getId();
-//        Optional<Room> room = roomService.findById(booking.getRoom().getId());
-//        if (room.isPresent()) {
-//            Room room1 = room.get();
-//            room1.setStatusRoom(1);
-//            roomService.save(room1);
-//        }
         booking.setUser(Users.builder().id(userId).build());
         booking.setStatus(0);
         booking.setCode(bookingService.generateBookingCode());
         return ResponseEntity.ok(bookingService.save(booking));
+    }
+
+    @GetMapping("/get-bookings-user")
+    public ResponseEntity<List<Booking>> getBookingsForUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Users user = (Users) authentication.getPrincipal();
+        Long userId = user.getId();
+        List<Booking> bookings = bookingService.findByUserId(userId);
+        return ResponseEntity.ok(bookings);
     }
 
 }
