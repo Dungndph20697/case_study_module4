@@ -42,6 +42,31 @@ public class UserService implements IUserService, UserDetailsService {
         userRepository.deleteById(id);
     }
 
+    public Optional<Users> findByEmailIgnoreCaseInternal(String email) {
+        return Optional.ofNullable(userRepository.findByEmailIgnoreCase(email));
+    }
+
+    @Override
+    public boolean existsByEmailIgnoreCase(String email) {
+        return userRepository.existsByEmailIgnoreCase(email);
+    }
+
+    @Override
+    public Optional<Users> findByEmailIgnoreCase(String email) {
+        return Optional.ofNullable(userRepository.findByEmailIgnoreCase(email));
+    }
+
+    @Override
+    public boolean existsByCitizenIdNumber(String citizenIdNumber) {
+        if (citizenIdNumber == null) return false;
+        return userRepository.existsByCitizenIdNumber(citizenIdNumber);
+    }
+
+    public Optional<Users> findByCitizenIdNumber(String citizenIdNumber) {
+        return Optional.ofNullable(userRepository.findByCitizenIdNumber(citizenIdNumber));
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) {
         Users user = userRepository.findUsersByEmail(email);
         if (user == null) {
