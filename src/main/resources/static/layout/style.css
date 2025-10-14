@@ -1,111 +1,151 @@
 /* ===============================
-   STYLE CHUNG CHO TOÀN BỘ WEBSITE
+   THEME MỚI - HOTEL ADMIN DASHBOARD
    =============================== */
-
-/* Reset & Font */
+/* RESET */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     color: #333;
     margin: 0;
-    padding: 0;
+    overflow-x: hidden;
 }
 
-/* Tiêu đề trang */
-.page-title h1 {
-    font-size: 2rem;
-    color: #343a40;
+/* HEADER */
+header.navbar {
+    background: linear-gradient(135deg, #0066ff 0%, #004aad 100%);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+header.navbar .navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
-.page-title p {
-    color: #6c757d;
-}
-
-/* Card chung */
-.card {
-    border-radius: 12px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-}
-
-/* Nút */
-.btn {
-    border-radius: 8px;
-    font-weight: 500;
-}
-
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
     background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    height: 100%;
+    height: calc(100vh - 56px);
+    position: fixed;
+    top: 56px;
+    left: 0;
+    width: 230px;
+    padding: 1rem 0.5rem;
+    border-right: 1px solid #dee2e6;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.05);
 }
 .sidebar .nav-link {
     color: #333;
     font-weight: 500;
     padding: 10px 15px;
     border-radius: 8px;
-    transition: background 0.2s;
+    display: block;
+    transition: all 0.25s ease-in-out;
 }
 .sidebar .nav-link:hover {
-    background: #e9ecef;
-    color: #007bff;
+    background: linear-gradient(135deg, #007bff 0%, #004aad 100%);
+    color: white;
+    transform: translateX(4px);
 }
-.sidebar .nav-link i {
+.sidebar .nav-link.active {
+    background: linear-gradient(135deg, #007bff 0%, #004aad 100%);
+    color: #fff;
+}
+
+/* MAIN CONTENT */
+main {
+    margin-left: 230px;
+    background-color: #ffffff;
+    min-height: calc(100vh - 56px);
+    padding: 2rem;
+}
+
+/* PAGE TITLE */
+.page-title {
+    margin-bottom: 30px;
+    text-align: center;
+}
+.page-title h1 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #212529;
+}
+.page-title p {
     color: #6c757d;
 }
 
-/* Footer */
-footer {
-    font-size: 0.9rem;
+/* DASHBOARD CARDS */
+.card {
+    border: none;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.25s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+.card h3 {
+    font-weight: 700;
+    color: #007bff;
+}
+.card p {
+    color: #6c757d;
+    margin-bottom: 0;
 }
 
-/* Login Page */
-#login-page .card {
-    border-radius: 15px;
+/* BUTTONS */
+.btn {
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding: 10px 18px;
 }
-#login-page .btn-custom {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.btn-primary {
+    background: linear-gradient(135deg, #007bff 0%, #004aad 100%);
     border: none;
 }
-#login-page .btn-custom:hover {
+.btn-primary:hover {
     opacity: 0.9;
 }
 
-/* Dashboard Boxes */
-.card-body h3 {
-    font-size: 2rem;
-}
-
-/* Table */
+/* TABLES */
 .table th {
-    font-weight: 600;
+    background-color: #007bff;
+    color: white;
 }
 .table td {
     vertical-align: middle;
 }
 
-/* Alerts */
-.alert {
-    border-radius: 10px;
+/* FOOTER */
+footer {
+    background: linear-gradient(135deg, #0066ff 0%, #004aad 100%);
+    color: #fff;
+    text-align: center;
+    padding: 12px;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 2;
 }
 
-/* Custom Scrollbar for sidebar */
-.sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 3px;
-}
 
-/* Responsive */
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .sidebar {
-        margin-bottom: 20px;
+        position: relative;
+        width: 100%;
+        height: auto;
+        box-shadow: none;
+    }
+    main {
+        margin-left: 0;
     }
 }
+
+content-wrapper{
+    background-color: black;
+
+}
+

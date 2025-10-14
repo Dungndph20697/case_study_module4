@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="layout/layout :: layout(~{::body})">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/layout :: layout(~{::body})}">
 <body>
 <section id="admin-dashboard" class="py-4">
     <div class="container-fluid">
@@ -11,31 +11,107 @@
         <div class="row">
             <div class="col-md-3" th:replace="fragments/sidebar-admin :: sidebar-admin"></div>
             <div class="col-md-9">
+                <h2 class="mb-4 fw-bold">Tổng quan hệ thống</h2>
+
+                <!-- Stats Cards -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card stats-card">
+                            <div class="card-body text-center">
+                                <i class="bi bi-house display-4 mb-3"></i>
+                                <h3 class="fw-bold">25</h3>
+                                <p class="mb-0">Tổng số phòng</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card stats-card-green">
+                            <div class="card-body text-center">
+                                <i class="bi bi-check-circle display-4 mb-3"></i>
+                                <h3 class="fw-bold">18</h3>
+                                <p class="mb-0">Phòng trống</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card stats-card-orange">
+                            <div class="card-body text-center">
+                                <i class="bi bi-calendar-check display-4 mb-3"></i>
+                                <h3 class="fw-bold">42</h3>
+                                <p class="mb-0">Đặt phòng</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card stats-card-purple">
+                            <div class="card-body text-center">
+                                <i class="bi bi-currency-dollar display-4 mb-3"></i>
+                                <h3 class="fw-bold">125M</h3>
+                                <p class="mb-0">Doanh thu (VNĐ)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Notifications -->
                 <div class="row g-4">
-                    <div class="col-md-4">
-                        <div class="card shadow-sm border-0">
-                            <div class="card-body text-center">
-                                <h3><i class="bi bi-house-door text-primary"></i></h3>
-                                <p class="fw-bold mb-0">Phòng</p>
-                                <span>120</span>
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="bi bi-graph-up me-2"></i>Biểu đồ doanh thu</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center py-5">
+                                    <i class="bi bi-bar-chart display-1 text-muted"></i>
+                                    <p class="text-muted mt-3">Biểu đồ doanh thu theo tháng</p>
+                                    <div class="row mt-4">
+                                        <div class="col-md-4">
+                                            <div class="border rounded p-3">
+                                                <h6 class="text-muted">Tháng 1</h6>
+                                                <h4 class="text-primary">45M</h4>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="border rounded p-3">
+                                                <h6 class="text-muted">Tháng 2</h6>
+                                                <h4 class="text-success">52M</h4>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="border rounded p-3">
+                                                <h6 class="text-muted">Tháng 3</h6>
+                                                <h4 class="text-warning">38M</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm border-0">
-                            <div class="card-body text-center">
-                                <h3><i class="bi bi-people text-success"></i></h3>
-                                <p class="fw-bold mb-0">Người dùng</p>
-                                <span>340</span>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="bi bi-bell me-2"></i>Thông báo</h5>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm border-0">
-                            <div class="card-body text-center">
-                                <h3><i class="bi bi-calendar-check text-warning"></i></h3>
-                                <p class="fw-bold mb-0">Đặt phòng</p>
-                                <span>58</span>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item border-0 px-0">
+                                        <small class="text-muted">10 phút trước</small>
+                                        <p class="mb-0">Đặt phòng mới từ khách hàng</p>
+                                    </div>
+                                    <div class="list-group-item border-0 px-0">
+                                        <small class="text-muted">1 giờ trước</small>
+                                        <p class="mb-0">Check-out phòng 205</p>
+                                    </div>
+                                    <div class="list-group-item border-0 px-0">
+                                        <small class="text-muted">2 giờ trước</small>
+                                        <p class="mb-0">Phòng 301 cần bảo trì</p>
+                                    </div>
+                                    <div class="list-group-item border-0 px-0">
+                                        <small class="text-muted">3 giờ trước</small>
+                                        <p class="mb-0">Check-in phòng 102 thành công</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
