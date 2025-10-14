@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin")
@@ -18,6 +19,11 @@ public class RoomRestcontroller {
     @GetMapping("/rooms/get-rooms")
     public ResponseEntity<List<Room>> getAllRooms() {
         return ResponseEntity.ok(roomService.findAll());
+    }
+
+    @GetMapping("/rooms/get-rooms/{id}")
+    public ResponseEntity<Room> getAllRooms(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.findById(id).get());
     }
 
     @PostMapping("/rooms/add-room")
