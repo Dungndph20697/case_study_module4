@@ -34,7 +34,6 @@ public class UserRestController {
     @GetMapping("/get-rooms-available")
     public ResponseEntity<List<Room>> userDatPhong(@RequestParam("checkIn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkIn,
                                                    @RequestParam("checkOut") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkOut) {
-        System.out.println("Có gọi");
         return ResponseEntity.ok(roomService.findAvailableRooms(checkIn, checkOut));
     }
 

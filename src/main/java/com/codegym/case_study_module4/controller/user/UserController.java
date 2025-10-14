@@ -141,52 +141,52 @@ public class UserController {
         return "redirect:/user/thong-tin";
     }
 
-    @PostMapping("/dat-phong")
-    public String postDatPhong(@RequestParam("ngayDen") String ngayDen,
-                               @RequestParam("ngayDi") String ngayDi,
-                               @RequestParam(value = "loaiPhong", required = false) String loaiPhong,
-                               @RequestParam(value = "ghiChu", required = false) String ghiChu,
-                               Principal principal,
-                               HttpSession session,
-                               RedirectAttributes redirectAttributes) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
-        Optional<Users> opt = userService.findByEmailIgnoreCase(principal.getName());
-        if (opt.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Người dùng không tồn tại");
-            return "redirect:/";
-        }
-        Users user = opt.get();
-        boolean phoneMissing = user.getPhoneNumber() == null || user.getPhoneNumber().trim().isEmpty();
-        boolean citizenMissing = user.getCitizenIdNumber() == null || user.getCitizenIdNumber().trim().isEmpty();
-
-        if (phoneMissing || citizenMissing) {
-            // Lưu payload tạm vào session để hoàn tất sau khi user nhập thông tin
-            session.setAttribute("PENDING_BOOKING", Map.of(
-                    "ngayDen", ngayDen,
-                    "ngayDi", ngayDi,
-                    "loaiPhong", loaiPhong == null ? "" : loaiPhong,
-                    "ghiChu", ghiChu == null ? "" : ghiChu
-            ));
-            redirectAttributes.addFlashAttribute("error", "Bạn cần hoàn thành thông tin cá nhân trước khi đặt phòng.");
-            return "redirect:/user/thong-tin";
-        }
-
-        // Người dùng đã có thông tin -> tạo booking ngay
-        Booking b = new Booking();
-        b.setCode("BK-" + System.currentTimeMillis());
-        LocalDate d1 = LocalDate.parse(ngayDen);
-        LocalDate d2 = LocalDate.parse(ngayDi);
-        b.setCheckInDate(d1.atStartOfDay());
-        b.setCheckOutDate(d2.atStartOfDay());
-        b.setStatus(0);
-        b.setUser(user);
-        // room not set (form currently does not select specific room)
-        bookingService.save(b);
-
-        redirectAttributes.addFlashAttribute("success", "Đặt phòng thành công");
-        return "redirect:/user/bang-dieu-khien";
-    }
+//    @PostMapping("/dat-phong")
+//    public String postDatPhong(@RequestParam("ngayDen") String ngayDen,
+//                               @RequestParam("ngayDi") String ngayDi,
+//                               @RequestParam(value = "loaiPhong", required = false) String loaiPhong,
+//                               @RequestParam(value = "ghiChu", required = false) String ghiChu,
+//                               Principal principal,
+//                               HttpSession session,
+//                               RedirectAttributes redirectAttributes) {
+//        if (principal == null) {
+//            return "redirect:/login";
+//        }
+//        Optional<Users> opt = userService.findByEmailIgnoreCase(principal.getName());
+//        if (opt.isEmpty()) {
+//            redirectAttributes.addFlashAttribute("error", "Người dùng không tồn tại");
+//            return "redirect:/";
+//        }
+//        Users user = opt.get();
+//        boolean phoneMissing = user.getPhoneNumber() == null || user.getPhoneNumber().trim().isEmpty();
+//        boolean citizenMissing = user.getCitizenIdNumber() == null || user.getCitizenIdNumber().trim().isEmpty();
+//
+//        if (phoneMissing || citizenMissing) {
+//            // Lưu payload tạm vào session để hoàn tất sau khi user nhập thông tin
+//            session.setAttribute("PENDING_BOOKING", Map.of(
+//                    "ngayDen", ngayDen,
+//                    "ngayDi", ngayDi,
+//                    "loaiPhong", loaiPhong == null ? "" : loaiPhong,
+//                    "ghiChu", ghiChu == null ? "" : ghiChu
+//            ));
+//            redirectAttributes.addFlashAttribute("error", "Bạn cần hoàn thành thông tin cá nhân trước khi đặt phòng.");
+//            return "redirect:/user/thong-tin";
+//        }
+//
+//        // Người dùng đã có thông tin -> tạo booking ngay
+//        Booking b = new Booking();
+//        b.setCode("BK-" + System.currentTimeMillis());
+//        LocalDate d1 = LocalDate.parse(ngayDen);
+//        LocalDate d2 = LocalDate.parse(ngayDi);
+//        b.setCheckInDate(d1.atStartOfDay());
+//        b.setCheckOutDate(d2.atStartOfDay());
+//        b.setStatus(0);
+//        b.setUser(user);
+//        // room not set (form currently does not select specific room)
+//        bookingService.save(b);
+//
+//        redirectAttributes.addFlashAttribute("success", "Đặt phòng thành công");
+//        return "redirect:/user/bang-dieu-khien";
+//    }
 
 }
