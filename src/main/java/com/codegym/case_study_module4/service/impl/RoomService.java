@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public class RoomService implements IRoomService {
 
     @Override
     public List<Room> findAll() {
-        Sort sort = Sort.by("id").descending();
+        Sort sort = Sort.by("id").ascending().descending();
         return roomRepository.findAll(sort);
     }
 
@@ -34,5 +35,10 @@ public class RoomService implements IRoomService {
     @Override
     public void remove(Long id) {
         roomRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Room> findAvailableRooms(LocalDateTime checkIn, LocalDateTime checkOut) {
+        return roomRepository.findAvailableRooms(checkIn, checkOut);
     }
 }

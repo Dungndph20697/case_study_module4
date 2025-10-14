@@ -36,5 +36,11 @@ public class BookingService implements IBookingService {
     public void remove(Long id) {
         bookingRepository.deleteById(id);
     }
+
+    @Override
+    public String generateBookingCode() {
+        long count = bookingRepository.count() + 1;
+        return String.format("B%05d", count);
+    }
 }
 

@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@ToString
 @Entity
 @Table(name = "rooms")
 public class Room {
