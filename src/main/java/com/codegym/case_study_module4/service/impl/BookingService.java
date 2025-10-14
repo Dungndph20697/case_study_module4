@@ -6,6 +6,7 @@ import com.codegym.case_study_module4.service.IBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,10 +38,23 @@ public class BookingService implements IBookingService {
         bookingRepository.deleteById(id);
     }
 
+
     @Override
     public String generateBookingCode() {
         long count = bookingRepository.count() + 1;
         return String.format("B%05d", count);
     }
-}
 
+
+
+    @Override
+    public List<Booking> findByUserId(Long userId) {
+        return bookingRepository.findByUserId(userId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByUserId(Long userId) {
+        bookingRepository.deleteByUserId(userId);
+    }
+}
