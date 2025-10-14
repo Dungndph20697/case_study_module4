@@ -3,6 +3,8 @@ package com.codegym.case_study_module4.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,9 +19,9 @@ public class Booking {
 
     private String code;
 
-    private String checkInDate;
+    private LocalDateTime checkInDate;
 
-    private String checkOutDate;
+    private LocalDateTime checkOutDate;
 
     private Integer status;
 
