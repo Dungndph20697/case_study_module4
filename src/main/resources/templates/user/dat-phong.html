@@ -9,39 +9,251 @@
 
         <div class="row">
             <div class="col-md-3" th:replace="fragments/sidebar-user :: sidebar-user"></div>
-            <div class="col-md-9">
-                <form class="card shadow-sm p-4" th:action="@{/user/dat-phong}" method="post">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Ngày đến</label>
-                            <input type="date" name="ngayDen" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Ngày đi</label>
-                            <input type="date" name="ngayDi" class="form-control" required>
-                        </div>
+            <div class="col-md-9 mt-3">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Ngày đến</label>
+                        <input type="datetime-local" name="ngayDen" id="ngayDen" class="form-control" onchange="findRommByDateTime()" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Chọn loại phòng</label>
-                        <select class="form-select" name="loaiPhong">
-                            <option value="don">Phòng đơn</option>
-                            <option value="doi">Phòng đôi</option>
-                            <option value="vip">Phòng VIP</option>
-                        </select>
+                    <div class="col-md-6">
+                        <label class="form-label">Ngày đi</label>
+                        <input type="datetime-local" name="ngayDi" id="ngayDi" class="form-control" onchange="findRommByDateTime()" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Ghi chú</label>
-                        <textarea class="form-control" name="ghiChu" rows="3" placeholder="Yêu cầu thêm..."></textarea>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-check-circle"></i> Xác nhận đặt phòng
-                        </button>
-                    </div>
-                </form>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Ghi chú</label>
+                    <textarea class="form-control" name="ghiChu" id="ghiChu" rows="3"
+                              placeholder="Yêu cầu thêm..."></textarea>
+                </div>
+                <div class="d-grid">
+                    <button type="button" class="btn btn-primary btn-lg" id="btnDatPhong">
+                        <i class="bi bi-check-circle"></i> Xác nhận đặt phòng
+                    </button>
+                </div>
+<!--                <div class="mb-3">-->
+<!--                    <label class="form-label">Chọn loại phòng</label>-->
+<!--                    <select class="form-select" name="loaiPhong" id="loaiPhong" required>-->
+<!--                        <option value="Phòng đơn">Phòng đơn</option>-->
+<!--                        <option value="Phòng đôi">Phòng đôi</option>-->
+<!--                        <option value="Phòng vip">Phòng VIP</option>-->
+<!--                        <option value="vip">Phòng tổng thống</option>-->
+<!--                    </select>-->
+<!--                </div>-->
             </div>
+            <div class="row g-4" id="loadRoom">
+            </div>
+
         </div>
     </div>
 </section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+        integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+        crossorigin="anonymous"></script>
+<script>
+
+    function findRommByDateTime(){
+        window.selectedRoomId = null;
+        $('.room-item.active').removeClass('active');
+        $('.room-item.selected').removeClass('selected');
+        const checkInDate = $("#ngayDen").val();
+        const checkOutDate = $("#ngayDi").val();
+        if (!checkInDate || !checkOutDate) {
+            loadRoom()
+        }
+        $.ajax({
+            type: "GET",
+            url: '/user/get-rooms-available?checkIn=' + checkInDate + '&checkOut=' + checkOutDate,
+            success: function (rooms) {
+                let html = '';
+                rooms.forEach(function (r) {
+                    html += `<div class="col-md-6 col-lg-4">
+                    <div class="card room-card room-available">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold">Phòng ${r.numberRoom}</h5>
+                                    <p class="text-muted mb-0">${r.typeRoom}</p>
+                                </div>
+                                <span class="badge bg-success">${r.statusRoom}</span>
+                            </div>
+                            <p class="fw-bold text-primary mb-3">${r.price}/ngày</p>
+                            <p class="small text-muted mb-3">${r.description}</p>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-warning btn-sm btn-choose" data-room-id="${r.id}">
+                                    <i class="bi bi-check2-circle me-1"></i> Chọn
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                })
+                html += '</tbody></table>';
+                $("#loadRoom").html(html);
+            }
+        })
+    }
+
+    function loadRoom() {
+        window.selectedRoomId = null;
+        $('.room-item.active').removeClass('active');
+        $('.room-item.selected').removeClass('selected');
+        $.ajax({
+            type: "GET",
+            url: '/user/get-rooms',
+            success: function (rooms) {
+                let html = '';
+                rooms.forEach(function (r) {
+                    html += `<div class="col-md-6 col-lg-4">
+                    <div class="card room-card room-available">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold">Phòng ${r.numberRoom}</h5>
+                                    <p class="text-muted mb-0">${r.typeRoom}</p>
+                                </div>
+                                <span class="badge bg-success">${r.statusRoom}</span>
+                            </div>
+                            <p class="fw-bold text-primary mb-3">${r.price}/ngày</p>
+                            <p class="small text-muted mb-3">${r.description}</p>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-warning btn-sm btn-choose" data-room-id="${r.id}">
+                                    <i class="bi bi-check2-circle me-1"></i> Chọn
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                })
+                html += '</tbody></table>';
+                $("#loadRoom").html(html);
+            }
+        })
+    }
+
+    $("#btnDatPhong").click(function () {
+        const checkInDate = $("#ngayDen").val();
+        const checkOutDate = $("#ngayDi").val();
+        const note = $("#ghiChu").val();
+        const room = 1;
+        if (!window.selectedRoomId) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Hãy chọn phòng trước khi đặt',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/user/dat-phong",
+            data: JSON.stringify({
+                checkInDate: checkInDate,
+                checkOutDate: checkOutDate,
+                note: note,
+                room: {id: window.selectedRoomId}
+            }),
+            contentType: "application/json",
+            success: function () {
+                Swal.fire({
+                    title: 'Succuss!',
+                    text: 'Đặt phòng thành công',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#checkInDate').val('');
+                        $('#checkOutDate').val('');
+                        $('#note').val('');
+                        window.selectedRoomId = null;
+                        $('.room-item.active').removeClass('active');
+                        $('.room-item.selected').removeClass('selected');
+                        loadRoom();
+                    }
+                });
+                // location.reload();
+            },
+            error: function () {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Có lỗi sảy ra',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+    })
+
+    $(document).on("click", ".btn-choose", function () {
+        // Bỏ chọn tất cả
+        $(".btn-choose").removeClass("active");
+        $(".card.room-card-available").removeClass("room-card-selected");
+
+        // Đánh dấu phòng hiện tại
+        $(this).addClass("active");
+        $(this).closest(".card.room-card-available").addClass("room-card-selected");
+
+        // Lưu ID phòng được chọn
+        window.selectedRoomId = $(this).data("room-id");
+    });
+    loadRoom();
+</script>
+<style>
+    /* --- Nút chọn phòng --- */
+    .btn-choose {
+        background-color: transparent;
+        border: 2px solid #ffc107;
+        color: #ffc107;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.25s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .btn-choose i {
+        font-size: 1rem;
+        transition: transform 0.2s ease;
+    }
+
+    .btn-choose:hover {
+        background-color: #fff3cd;
+        border-color: #ffb300;
+        color: #ffb300;
+    }
+
+    .btn-choose:hover i {
+        transform: scale(1.1);
+    }
+
+    /* --- Khi nút được chọn --- */
+    .btn-choose.active {
+        background-color: #ffc107 !important;
+        border-color: #ffc107 !important;
+        color: #fff !important;
+    }
+
+    .btn-choose.active i {
+        transform: scale(1.1);
+        color: #fff;
+    }
+
+    /* --- Thẻ phòng được chọn --- */
+    .room-card-selected {
+        border: 3px solid #ffc107 !important;
+        background-color: #fffbea;
+        box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+        transition: 0.3s ease;
+    }
+</style>
 </body>
 </html>

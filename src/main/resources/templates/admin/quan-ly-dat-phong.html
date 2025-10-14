@@ -11,15 +11,14 @@
             <div class="col-md-3" th:replace="fragments/sidebar-admin :: sidebar-admin"></div>
 
             <div class="content-wrapper">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="fw-bold">Danh sách đặt phòng</h2>
-                    <div>
-                        <button class="btn btn-success btn-custom me-2">
-                            <i class="bi bi-download me-2"></i>Xuất Excel
-                        </button>
-
-                    </div>
-                </div>
+<!--                <div class="d-flex justify-content-between align-items-center mb-4">-->
+<!--                    <h2 class="fw-bold">Danh sách đặt phòng</h2>-->
+<!--                    <div>-->
+<!--                        <button class="btn btn-success btn-custom me-2">-->
+<!--                            <i class="bi bi-download me-2"></i>Xuất Excel-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
 
                 <!-- Booking Statistics -->
                 <div class="row g-4 mb-4">
@@ -72,14 +71,105 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Modal Chi tiết đặt phòng -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalLabel">
+                        <i class="bi bi-info-circle me-2"></i> Chi tiết đặt phòng
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="hidden" id="id">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-primary">Thông tin phòng</h6>
+                            <p><strong>Mã phòng:</strong> <span id="code"></span></p>
+                            <p><strong>Số phòng:</strong> <span id="roomNumber"></span></p>
+                            <p><strong>Loại phòng:</strong> <span id="typeRoom"></span></p>
+                            <p><strong>Giá:</strong> <span id="price"></span> VNĐ / ngày</p>
+                            <p><strong>Mô tả:</strong> <span id="description"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-primary">Thông tin khách hàng</h6>
+                            <p><strong>Tên:</strong> <span id="username"></span></p>
+                            <p><strong>Email:</strong> <span id="email"></span></p>
+                            <p><strong>SĐT:</strong> <span id="phone"></span></p>
+                            <p><strong>CMND/CCCD:</strong> <span id="CCCD"></span></p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Ngày nhận phòng:</strong> <span id="checkIn"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Ngày trả phòng:</strong> <span id="checkOut"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <p><strong>Ghi chú:</strong></p>
+                        <p id="note" class="border rounded p-2 bg-light"></p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"  aria-label="Xác nhận">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary"  aria-label="Huỷ">Huỷ</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <!-- include dependencies used by other pages (keeps consistent with room page) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+        integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+        crossorigin="anonymous"></script>
 <script>
+    const modalDetail = new bootstrap.Modal(document.getElementById('exampleModal'), {})
+
+    function showMoalDetail(id) {
+        $.ajax({
+            type: "GET",
+            url: `/admin/bookings/get-booking/${id}`,
+            success: function (b) {
+                // document.getElementById("numberRoomUpdate").value = r.numberRoom;
+                // document.getElementById("typeUpdate").value = r.typeRoom;
+                // document.getElementById("priceUpdate").value = r.price;
+                $("#code").html(b.code)
+                $("#id").val(b.id)
+                $("#roomNumber").html(b.room.numberRoom)
+                $("#note").html(b.note)
+                $("#checkOut").html(b.checkOutDate)
+                $("#checkIn").html(b.checkInDate)
+                $("#CCCD").html(b.user.citizenIdNumber)
+                $("#email").html(b.user.email)
+                $("#username").html(b.user.username)
+                $("#description").html(b.room.description)
+                $("#price").html(b.room.price)
+                $("#typeRoom").html(b.room.typeRoom)
+                $("#phone").html(b.user.phoneNumber)
+            }
+        });
+        modalDetail.show();
+    }
+
     function computeNights(checkIn, checkOut) {
         try {
             const d1 = new Date(checkIn);
@@ -129,7 +219,6 @@
                     const checkIn = b.checkInDate;
                     const checkOut = b.checkOutDate;
                     const nights = computeNights(checkIn, checkOut);
-
                     // room price may be nested under b.room.price
                     const roomPrice = (b.room && b.room.price) ? b.room.price : null;
                     let total = '';
@@ -150,7 +239,7 @@
                             <td class="fw-bold text-success">${total}</td>
                             <td>${statusBadge(b.status)}</td>
                             <td>
-                                <button class="btn btn-sm btn-outline-info me-1"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-info me-1" onclick="showMoalDetail(${b.id})"><i class="bi bi-eye"></i></button>
                                 <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
                             </td>
                         </tr>`;

@@ -38,6 +38,15 @@ public class BookingService implements IBookingService {
         bookingRepository.deleteById(id);
     }
 
+
+    @Override
+    public String generateBookingCode() {
+        long count = bookingRepository.count() + 1;
+        return String.format("B%05d", count);
+    }
+
+
+
     @Override
     public List<Booking> findByUserId(Long userId) {
         return bookingRepository.findByUserId(userId);
