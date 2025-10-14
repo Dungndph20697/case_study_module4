@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="layout/layout :: layout(~{::body})">
+<body>
+<div class="container mt-4">
+    <h2>Thông tin cá nhân</h2>
+
+    <!-- Flash messages -->
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <form th:action="@{/user/update}" th:object="${profile}" method="post" novalidate>
+        <!-- CSRF token (nếu có Spring Security) -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div class="mb-3">
+            <label for="username" class="form-label">Họ và tên</label>
+            <input type="text" id="username" th:field="*{username}" class="form-control" placeholder="Nhập họ và tên" required />
+            <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <!-- readonly to avoid changing principal identity while logged in -->
+            <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="example@mail.com" required readonly />
+            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="phoneNumber" class="form-label">Số điện thoại</label>
+            <input type="tel" id="phoneNumber" th:field="*{phoneNumber}" class="form-control" placeholder="09xxxxxxxx" pattern="[0-9]{9,11}" required />
+            <div class="form-text">Chỉ nhập chữ số, 9-11 chữ số.</div>
+            <div class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="citizenIdNumber" class="form-label">CCCD</label>
+            <input type="text" id="citizenIdNumber" th:field="*{citizenIdNumber}" class="form-control" placeholder="Số CCCD" pattern="[0-9]{9,12}" required />
+            <div class="form-text">Chỉ nhập chữ số.</div>
+            <div class="text-danger" th:if="${#fields.hasErrors('citizenIdNumber')}" th:errors="*{citizenIdNumber}"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <a th:href="@{/}" class="btn btn-secondary ms-2">Hủy</a>
+    </form>
+</div>
+
+</body>
+</html>

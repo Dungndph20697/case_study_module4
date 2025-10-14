@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin")
@@ -31,16 +29,16 @@ public class RoomRestcontroller {
     public ResponseEntity<?> addRoom(@RequestBody Room room) {
         // số phòng chỉ chứa chữ số
         if (!room.getNumberRoom().matches("\\d+")) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Số phòng chỉ được chứa chữ số."));
+            return ResponseEntity.badRequest().body("Số phòng chỉ được chứa chữ số.");
         }
 
         // giá phòng theo định dạng tiền việt
         if (room.getPrice() == null || room.getPrice() <= 0) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Giá phòng phải là số dương và không được để trống."));
+            return ResponseEntity.badRequest().body("Giá phòng phải là số dương và không được để trống.");
         }
         // No need to convert to string, directly validate the numeric value
         if (room.getPrice() % 1000 != 0) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Giá phòng phải là bội số của 1.000."));
+            return ResponseEntity.badRequest().body("Giá phòng phải là bội số của 1.000.");
         }
 
         return ResponseEntity.ok(roomService.save(room));
@@ -55,15 +53,15 @@ public class RoomRestcontroller {
     public ResponseEntity<?> addRoom(@PathVariable Long id, @RequestBody Room room) {
         // Validate room number (digits only)
         if (!room.getNumberRoom().matches("\\d+")) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Lỗi: Số phòng chỉ được chứa chữ số."));
+            return ResponseEntity.badRequest().body("Lỗi: Số phòng chỉ được chứa chữ số.");
         }
 
         // Validate room price (Vietnamese currency format)
         if (room.getPrice() == null || room.getPrice() <= 0) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Lỗi: Giá phòng phải là số dương và không được để trống."));
+            return ResponseEntity.badRequest().body("Lỗi: Giá phòng phải là số dương và không được để trống.");
         }
         if (room.getPrice() % 1000 != 0) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Lỗi: Giá phòng phải là bội số của 1.000."));
+            return ResponseEntity.badRequest().body("Lỗi: Giá phòng phải là bội số của 1.000.");
         }
 
         room.setId(id);
