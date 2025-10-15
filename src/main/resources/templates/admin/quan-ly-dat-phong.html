@@ -11,15 +11,6 @@
             <div class="col-md-3" th:replace="fragments/sidebar-admin :: sidebar-admin"></div>
 
             <div class="content-wrapper">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="fw-bold">Danh sách đặt phòng</h2>
-                    <div>
-                        <button class="btn btn-success btn-custom me-2">
-                            <i class="bi bi-download me-2"></i>Xuất Excel
-                        </button>
-
-                    </div>
-                </div>
 
                 <!-- Booking Statistics -->
                 <div class="row g-4 mb-4">
@@ -27,7 +18,7 @@
                         <div class="card stats-card">
                             <div class="card-body text-center">
                                 <i class="bi bi-calendar-check display-6 mb-2"></i>
-                                <h4 class="fw-bold">42</h4>
+                                <h4 class="fw-bold" id="totalBookings">42</h4>
                                 <p class="mb-0">Tổng đặt phòng</p>
                             </div>
                         </div>
@@ -36,7 +27,7 @@
                         <div class="card stats-card-green">
                             <div class="card-body text-center">
                                 <i class="bi bi-check-circle display-6 mb-2"></i>
-                                <h4 class="fw-bold">35</h4>
+                                <h4 class="fw-bold" id="confirmedBookings">35</h4>
                                 <p class="mb-0">Đã xác nhận</p>
                             </div>
                         </div>
@@ -45,7 +36,7 @@
                         <div class="card stats-card-orange">
                             <div class="card-body text-center">
                                 <i class="bi bi-clock display-6 mb-2"></i>
-                                <h4 class="fw-bold">5</h4>
+                                <h4 class="fw-bold" id="pendingBookings">5</h4>
                                 <p class="mb-0">Chờ xác nhận</p>
                             </div>
                         </div>
@@ -54,7 +45,7 @@
                         <div class="card stats-card-purple">
                             <div class="card-body text-center">
                                 <i class="bi bi-x-circle display-6 mb-2"></i>
-                                <h4 class="fw-bold">2</h4>
+                                <h4 class="fw-bold" id="canceledBookings">2</h4>
                                 <p class="mb-0">Đã hủy</p>
                             </div>
                         </div>
@@ -72,25 +63,364 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Modal Chi tiết đặt phòng -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalLabel1">
+                        <i class="bi bi-info-circle me-2"></i> Chi tiết đặt phòng
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="hidden" id="id">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-primary">Thông tin phòng</h6>
+                            <p><strong>Mã phòng:</strong> <span id="code"></span></p>
+                            <p><strong>Số phòng:</strong> <span id="roomNumber"></span></p>
+                            <p><strong>Loại phòng:</strong> <span id="typeRoom"></span></p>
+                            <p><strong>Giá:</strong> <span id="price"></span> VNĐ / ngày</p>
+                            <p><strong>Mô tả:</strong> <span id="description"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-primary">Thông tin khách hàng</h6>
+                            <p><strong>Tên:</strong> <span id="username"></span></p>
+                            <p><strong>Email:</strong> <span id="email"></span></p>
+                            <p><strong>SĐT:</strong> <span id="phone"></span></p>
+                            <p><strong>CMND/CCCD:</strong> <span id="CCCD"></span></p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Ngày nhận phòng:</strong> <span id="checkIn"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Ngày trả phòng:</strong> <span id="checkOut"></span></p>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Số đêm:</strong> <span id="soDem"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Tổng tiền:</strong> <span id="tongTien"></span></p>
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <p><strong>Ghi chú:</strong></p>
+                        <p id="note" class="border rounded p-2 bg-light"></p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div id="showBtn"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal update đặt phòng -->
+    <div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalLabel">
+                        <i class="bi bi-info-circle me-2"></i> Sửa thời gian đặt phòng
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="hidden" id="idUpdate">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Ngày nhận phòng:</strong> <span id="checkInUpdate"></span></p>
+                            <input type="datetime-local" name="ngayDen" id="ngayDen" class="form-control"
+                                   onchange="loadTongTienAndSoDem()" required>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Ngày trả phòng:</strong> <span id="checkOutUpdate"></span></p>
+                            <input type="datetime-local" name="ngayDi" id="ngayDi" class="form-control"
+                                   onchange="loadTongTienAndSoDem()" required>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Số đêm:</strong> <span id="soDemUpdate"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Tổng tiền:</strong> <span id="tongTienUpdate"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="showBntUpdate"></div>
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <!-- include dependencies used by other pages (keeps consistent with room page) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+        integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+        crossorigin="anonymous"></script>
+<script th:inline="none">
+    const modalDetail = new bootstrap.Modal(document.getElementById('exampleModal'), {})
+    const modalDetailUpdate = new bootstrap.Modal(document.getElementById('exampleModalUpdate'), {})
 
-<script>
-    function computeNights(checkIn, checkOut) {
-        try {
-            const d1 = new Date(checkIn);
-            const d2 = new Date(checkOut);
-            if (isNaN(d1) || isNaN(d2)) return '';
-            const diff = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
-            return diff > 0 ? diff : '';
-        } catch (e) {
-            return '';
+
+    function loadTongTienAndSoDem() {
+        const checkInDate = $("#ngayDen").val();
+        const checkOutDate = $("#ngayDi").val();
+        const id = $("#idUpdate").val();
+        if (checkInDate && checkOutDate) {
+            $.ajax({
+                type: "GET",
+                url: `/admin/bookings/get-booking/${id}`,
+                success: function (b) {
+                    const nights = computeNights(checkInDate, checkOutDate);
+                    const roomPrice = (b.room && b.room.price) ? b.room.price : null;
+                    let total = '';
+                    if (roomPrice) {
+                        const nightsVal = nights || 0; // nếu nights = '' thì = 0
+                        total = new Intl.NumberFormat('vi-VN').format(
+                            (nightsVal > 0 ? nightsVal : 1) * roomPrice
+                        ) + 'đ';
+                    }
+                    $("#tongTienUpdate").html(total)
+                    $("#soDemUpdate").html(nights);
+                }
+            });
+
+
         }
     }
+
+    function btnXacNhan(status) {
+        const id = $("#id").val();
+        $.ajax({
+            type: "PUT",
+            url: `/admin/bookings/change-staus/${id}?status=${status}`,
+            success: function (b) {
+                modalDetail.hide();
+                loadBookings();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: 'Cập nhật trạng thái đặt phòng thành công!',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        });
+        modalDetail.show();
+    }
+
+
+    function showMoalDetail(id) {
+        $.ajax({
+            type: "GET",
+            url: `/admin/bookings/get-booking/${id}`,
+            success: function (b) {
+                const nights = computeNights(b.checkInDate, b.checkOutDate);
+                let total = '';
+                if (nights && b.room.price) {
+                    total = new Intl.NumberFormat('vi-VN').format(nights * b.room.price) + 'đ';
+                }
+                let showBth = '';
+                if (b.status === 0) {
+                    showBth = `<button type="button" class="btn btn-success" aria-label="Xác nhận" onclick="btnXacNhan(1)">Xác nhận</button>
+                               <button type="button" class="btn btn-danger ms-2" aria-label="Hủy" onclick="btnXacNhan(2)">Hủy</button>`;
+                }
+                $("#id").val(b.id)
+                $("#code").html(b.code)
+                $("#roomNumber").html(b.room.numberRoom)
+                $("#note").html(b.note)
+                $("#checkOut").html(formatDateTime(b.checkOutDate))
+                $("#checkIn").html(formatDateTime(b.checkInDate))
+                $("#CCCD").html(b.user.citizenIdNumber)
+                $("#email").html(b.user.email)
+                $("#username").html(b.user.username)
+                $("#description").html(b.room.description)
+                $("#price").html(b.room.price)
+                $("#typeRoom").html(b.room.typeRoom)
+                $("#phone").html(b.user.phoneNumber)
+                $("#soDem").html(nights)
+                $("#tongTien").html(total)
+                $("#showBtn").html(showBth);
+            }
+        });
+        modalDetail.show();
+    }
+
+    function btnXacNhanUpdate() {
+        const id = $("#idUpdate").val();
+        const checkInDate = $("#ngayDen").val();
+        const checkOutDate = $("#ngayDi").val();
+
+        // Convert sang Date object để so sánh
+        const now = new Date();
+        const checkIn = new Date(checkInDate);
+        const checkOut = new Date(checkOutDate);
+
+        if (checkIn < now.setHours(0, 0, 0, 0)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ngày đến không hợp lệ',
+                text: 'Ngày đến không được nhỏ hơn ngày hiện tại!',
+            });
+            return;
+        }
+
+        if (checkOut <= checkIn) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ngày đi không hợp lệ',
+                text: 'Ngày đi phải sau ngày đến!',
+            });
+            return;
+        }
+        $.ajax({
+            type: "PUT",
+            url: `/admin/bookings/change-datetime/${id}`,
+            contentType: "application/json",
+            data: JSON.stringify({
+                checkInDate: checkInDate,
+                checkOutDate: checkOutDate,
+            }),
+            success: function () {
+
+                loadBookings();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: 'Cập nhật đặt phòng thành công!',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                modalDetailUpdate.hide();
+            }
+        });
+
+    }
+
+    function btnTraPhong(){
+        const id = $("#idUpdate").val();
+        const checkInDate = $("#ngayDen").val();
+        const checkOutDate = $("#ngayDi").val();
+
+        const checkIn = new Date(checkInDate);
+        const checkOut = new Date(checkOutDate);
+
+
+
+        if (checkOut <= checkIn) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ngày đi không hợp lệ',
+                text: 'Ngày đi phải sau ngày đến!',
+            });
+            return;
+        }
+        $.ajax({
+            type: "PUT",
+            url: `/admin/bookings/checkout/${id}`,
+            contentType: "application/json",
+            data: JSON.stringify({
+                checkOutDate: checkOutDate,
+            }),
+            success: function () {
+
+                loadBookings();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: 'Checkout phòng thành công!',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                modalDetailUpdate.hide();
+            }
+        });
+    }
+
+    function showMoalUpdate(id) {
+        $.ajax({
+            type: "GET",
+            url: `/admin/bookings/get-booking/${id}`,
+            success: function (b) {
+                $("#idUpdate").val(b.id)
+                $("#ngayDen").val(b.checkInDate)
+                $("#ngayDi").val(b.checkOutDate)
+                const nights = computeNights(b.checkInDate, b.checkOutDate);
+                // room price may be nested under b.room.price
+                const roomPrice = (b.room && b.room.price) ? b.room.price : null;
+                let total = '';
+                if (roomPrice) {
+                    const nightsVal = nights || 0; // nếu nights = '' thì = 0
+                    total = new Intl.NumberFormat('vi-VN').format(
+                        (nightsVal > 0 ? nightsVal : 1) * roomPrice
+                    ) + 'đ';
+                }
+                let showBntUpdate = '';
+                if (b.status === 0) {
+                    showBntUpdate = `<button type="button" class="btn btn-success" aria-label="Xác nhận" onclick="btnXacNhanUpdate()">Xác nhận</button>`;
+                } else if (b.status === 1) {
+                    showBntUpdate = `<button type="button" class="btn btn-success" aria-label="Xác nhận" onclick="btnTraPhong()">Trả phòng</button>`;
+                }
+                $("#showBntUpdate").html(showBntUpdate)
+                $("#showBnt").html(total)
+                $("#tongTienUpdate").html(total)
+                $("#soDemUpdate").html(nights)
+            }
+        });
+        modalDetailUpdate.show();
+    }
+
+    // function btnTraPhong() {
+    //     const id = $("#idUpdate").val();
+    //     $.ajax({
+    //         type: "PUT",
+    //         url: `/admin/bookings/change-staus/${id}?status=3`,
+    //         success: function (b) {
+    //             modalDetailUpdate.hide();
+    //             loadBookings();
+    //             Swal.fire({
+    //                 icon: 'success',
+    //                 title: 'Thành công',
+    //                 text: 'Cập nhật trạng thái đặt phòng thành công!',
+    //                 timer: 2000,
+    //                 showConfirmButton: false
+    //             });
+    //         }
+    //     });
+    //     modalDetailUpdate.show();
+    // }
+
 
     function statusBadge(status) {
         if (status == null) return '<span class="badge bg-secondary">Unknown</span>';
@@ -101,8 +431,24 @@
                 return '<span class="badge bg-success">Đã xác nhận</span>';
             case 2:
                 return '<span class="badge bg-danger">Đã hủy</span>';
+            case 3:
+                return '<span class="badge bg-secondary">Đã trả phòng</span>';
             default:
                 return '<span class="badge bg-secondary">Khác</span>';
+        }
+    }
+
+    function computeNights(checkIn, checkOut) {
+        try {
+            const d1 = new Date(checkIn);
+            const d2 = new Date(checkOut);
+            if (isNaN(d1) || isNaN(d2)) return '';
+            let diff = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+            // Tối thiểu 1 đêm
+            if (diff <= 0) diff = 1;
+            return diff;
+        } catch (e) {
+            return '';
         }
     }
 
@@ -111,6 +457,33 @@
             type: "GET",
             url: '/admin/bookings/get-bookings',
             success: function (bookings) {
+                // --- TÍNH TOÁN SỐ LƯỢNG ---
+                // --- TÍNH TOÁN SỐ LƯỢNG ---
+                let totalCount = bookings.length;
+                let confirmedCount = 0;
+                let pendingCount = 0;
+                let canceledCount = 0;
+
+                bookings.forEach(b => {
+                    switch (b.status) {
+                        case 1: // Đã xác nhận
+                            confirmedCount++;
+                            break;
+                        case 0: // Chờ xác nhận
+                            pendingCount++;
+                            break;
+                        case 2: // Đã hủy
+                            canceledCount++;
+                            break;
+                    }
+                });
+
+                // --- CẬP NHẬT VÀO GIAO DIỆN ---
+                $('#totalBookings').text(totalCount);
+                $('#confirmedBookings').text(confirmedCount);
+                $('#pendingBookings').text(pendingCount);
+                $('#canceledBookings').text(canceledCount);
+
                 let html = '<table id="bookingTable" class="table" cellspacing="0" cellpadding="5"><thead>' +
                     '<tr>' +
                     '<th>Mã đặt</th>' +
@@ -126,32 +499,38 @@
 
                 bookings.forEach(function (b) {
                     // b is a Booking entity. Use nested fields safely.
-                    const checkIn = b.checkInDate;
-                    const checkOut = b.checkOutDate;
-                    const nights = computeNights(checkIn, checkOut);
-
+                    const checkIn = formatDateTime(b.checkInDate);
+                    const checkOut = formatDateTime(b.checkOutDate);
+                    const nights = computeNights(b.checkInDate, b.checkOutDate);
                     // room price may be nested under b.room.price
                     const roomPrice = (b.room && b.room.price) ? b.room.price : null;
                     let total = '';
-                    if (nights && roomPrice) {
-                        total = new Intl.NumberFormat('vi-VN').format(nights * roomPrice) + 'đ';
+                    if (roomPrice) {
+                        const nightsVal = nights || 0; // nếu nights = '' thì = 0
+                        total = new Intl.NumberFormat('vi-VN').format(
+                            (nightsVal > 0 ? nightsVal : 1) * roomPrice
+                        ) + 'đ';
                     }
 
                     const userName = (b.user && b.user.username) ? b.user.username : '';
                     const roomNumber = (b.room && b.room.numberRoom) ? b.room.numberRoom : '';
+                    let btnUpdate = ``;
+                    if (b.status === 0 || b.status === 1) {
+                        btnUpdate += `<button class="btn btn-sm btn-outline-info me-1" onclick="showMoalUpdate(${b.id})"><i class="bi bi-pencil"></i></button>`;
+                    }
 
                     html += `<tr>
                             <td class="fw-semibold">${b.code ? b.code : ('#' + (b.id || ''))}</td>
                             <td>${userName}</td>
                             <td>${roomNumber}</td>
-                            <td>${checkIn ? checkIn : ''}</td>
-                            <td>${checkOut ? checkOut : ''}</td>
+                            <td>${checkIn}</td>
+                            <td>${checkOut}</td>
                             <td>${nights}</td>
                             <td class="fw-bold text-success">${total}</td>
                             <td>${statusBadge(b.status)}</td>
                             <td>
-                                <button class="btn btn-sm btn-outline-info me-1"><i class="bi bi-eye"></i></button>
-                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-outline-info me-1" onclick="showMoalDetail(${b.id})"><i class="bi bi-eye"></i></button>
+                                ${btnUpdate}
                             </td>
                         </tr>`;
                 });
@@ -160,7 +539,9 @@
                 $('#bookingContent').html(html);
                 // initialize DataTable (using DataTables modern API)
                 try {
-                    new DataTable('#bookingTable');
+                    new DataTable('#bookingTable', {
+                        order: [[0, 'desc']]
+                    });
                 } catch (e) {
                     console.error('DataTable init error', e);
                 }
@@ -170,6 +551,21 @@
                 $('#bookingContent').html('<div class="alert alert-danger">Không thể tải dữ liệu đặt phòng.</div>');
             }
         });
+    }
+
+    function formatDateTime(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        if (isNaN(date)) return dateString; // nếu lỗi parse thì trả lại nguyên bản
+
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}/${month}/${day}, ${hours}:${minutes}:${seconds}`;
     }
 
     $(document).ready(function () {

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,9 @@ public class RoomService implements IRoomService {
     //  Lấy toàn bộ danh sách phòng (kèm ảnh)
     @Override
     public List<Room> findAll() {
+
         return roomRepository.findAllWithImages();
+
     }
 
     //  Tìm phòng theo ID
@@ -42,6 +45,7 @@ public class RoomService implements IRoomService {
     public void remove(Long id) {
         roomRepository.deleteById(id);
     }
+
 
     //  Đặt phòng (chuyển trạng thái)
     public boolean book(Long id) {
@@ -72,5 +76,10 @@ public class RoomService implements IRoomService {
     //  Tìm kiếm không phân trang (để kiểm tra nếu chỉ có 1 kết quả)
     public List<Room> searchRoomsNoPage(String keyword) {
         return roomRepository.searchRoomsNoPage(keyword);
+
+    @Override
+    public List<Room> findAvailableRooms(LocalDateTime checkIn, LocalDateTime checkOut) {
+        return roomRepository.findAvailableRooms(checkIn, checkOut);
+
     }
 }

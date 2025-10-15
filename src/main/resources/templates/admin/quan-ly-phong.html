@@ -265,10 +265,11 @@
                 });
                 // location.reload();
             },
-            error: function () {
+            error: function (response) {
+                let errorMessage = response.responseJSON && response.responseJSON.message ? response.responseJSON.message : 'Có lỗi xảy ra';
                 Swal.fire({
                     title: 'Error!',
-                    text: 'Có lỗi sảy ra',
+                    text: errorMessage,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });

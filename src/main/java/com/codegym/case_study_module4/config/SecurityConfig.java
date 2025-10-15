@@ -2,7 +2,6 @@ package com.codegym.case_study_module4.config;
 
 
 import com.codegym.case_study_module4.service.IUserService;
-import com.codegym.case_study_module4.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,21 +40,28 @@ public class SecurityConfig {
         http
                 // Phân quyền cho từng loại request
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/login", "/logout").permitAll()
+                        .requestMatchers("/", "/login","user/form-register","user/register").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()
                 )
 
-                .formLogin(Customizer.withDefaults())
-                // Cho phép logout
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll()
+                )
+                // Cho phép logout (POST request with CSRF token)
                 .logout(logout -> logout
                         .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
                 // Cho phép basic auth cho REST client (Postman, mobile app)
                 .httpBasic(Customizer.withDefaults())
-                // CSRF: bật cho web, tắt cho API
+                // CSRF: bật cho web, tắt cho API. Không tắt CSRF cho /user/** vì form web cần token
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/admin/**", "/user/**", "/api/**")
                 );

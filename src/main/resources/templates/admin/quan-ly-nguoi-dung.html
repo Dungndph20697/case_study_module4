@@ -9,36 +9,10 @@
 
         <div class="row">
             <div class="col-md-3" th:replace="fragments/sidebar-admin :: sidebar-admin"></div>
-            <!--            <div class="col-md-9">-->
-            <!--                <table class="table table-bordered table-hover shadow-sm">-->
-            <!--                    <thead class="table-light">-->
-            <!--                    <tr>-->
-            <!--                        <th>ID</th>-->
-            <!--                        <th>Tên đăng nhập</th>-->
-            <!--                        <th>Email</th>-->
-            <!--                        <th>Vai trò</th>-->
-            <!--                    </tr>-->
-            <!--                    </thead>-->
-            <!--                    <tbody>-->
-            <!--                    <tr>-->
-            <!--                        <td>1</td>-->
-            <!--                        <td>admin01</td>-->
-            <!--                        <td>admin@gmail.com</td>-->
-            <!--                        <td><span class="badge bg-danger">ADMIN</span></td>-->
-            <!--                    </tr>-->
-            <!--                    <tr>-->
-            <!--                        <td>2</td>-->
-            <!--                        <td>user01</td>-->
-            <!--                        <td>user@gmail.com</td>-->
-            <!--                        <td><span class="badge bg-primary">USER</span></td>-->
-            <!--                    </tr>-->
-            <!--                    </tbody>-->
-            <!--                </table>-->
-            <!--            </div>-->
             <div class="content-wrapper">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2 class="fw-bold">Danh sách người dùng</h2>
-                    <button class="btn btn-primary btn-custom">
+                    <button class="btn btn-primary btn-custom" id="btnAddUser">
                         <i class="bi bi-person-plus me-2"></i>Thêm người dùng
                     </button>
                 </div>
@@ -74,114 +48,11 @@
                     </div>
                 </div>
 
-                <!-- User Table -->
+                <!-- User Table (dynamic via AJAX) -->
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên</th>
-                                    <th>Tài khoản</th>
-                                    <th>Email</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Vai trò</th>
-                                    <th>Trạng thái</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td class="fw-semibold">1</td>
-                                    <td>Quản trị viên</td>
-                                    <td>admin</td>
-                                    <td>admin@hotel.com</td>
-                                    <td>0901234567</td>
-                                    <td><span class="badge bg-danger badge-custom">Admin</span></td>
-                                    <td><span class="badge bg-success">Hoạt động</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary me-2">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">2</td>
-                                    <td>Nhân viên A</td>
-                                    <td>staff</td>
-                                    <td>staff@hotel.com</td>
-                                    <td>0912345678</td>
-                                    <td><span class="badge bg-info badge-custom">Nhân viên</span></td>
-                                    <td><span class="badge bg-success">Hoạt động</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary me-2">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">3</td>
-                                    <td>Khách hàng Demo</td>
-                                    <td>user</td>
-                                    <td>user@demo.com</td>
-                                    <td>0923456789</td>
-                                    <td><span class="badge bg-success badge-custom">Khách hàng</span></td>
-                                    <td><span class="badge bg-success">Hoạt động</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary me-2">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">4</td>
-                                    <td>Nguyễn Văn A</td>
-                                    <td>nguyenvana</td>
-                                    <td>nguyenvana@email.com</td>
-                                    <td>0934567890</td>
-                                    <td><span class="badge bg-success badge-custom">Khách hàng</span></td>
-                                    <td><span class="badge bg-success">Hoạt động</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary me-2">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">5</td>
-                                    <td>Trần Thị B</td>
-                                    <td>tranthib</td>
-                                    <td>tranthib@email.com</td>
-                                    <td>0945678901</td>
-                                    <td><span class="badge bg-success badge-custom">Khách hàng</span></td>
-                                    <td><span class="badge bg-warning">Tạm khóa</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary me-2">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-success me-2">
-                                            <i class="bi bi-unlock"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            <div id="userContent"></div>
                         </div>
                     </div>
                 </div>
@@ -189,8 +60,366 @@
         </div>
     </div>
 </section>
+
+<!-- User Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">Thêm / Sửa người dùng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="userId" />
+                <div class="mb-3">
+                    <label for="email">Tài khoản (Email)</label>
+                    <input type="email" id="email" class="form-control" placeholder="*không được để trống" />
+                </div>
+                <div class="mb-3">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" class="form-control" placeholder="*không được để trống" />
+                </div>
+                <div class="mb-3">
+                    <label for="username">Tên người dùng</label>
+                    <input type="text" id="username" class="form-control" placeholder="*không được để trống" />
+                </div>
+                <div class="mb-3">
+                    <label for="phoneNumber">Số điện thoại</label>
+                    <input type="text" id="phoneNumber" class="form-control" placeholder="*không được để trống" />
+                </div>
+                <div class="mb-3">
+                    <label for="citizenIdNumber">Căn cước công dân/CMND</label>
+                    <input type="text" id="citizenIdNumber" class="form-control" placeholder="*không được để trống" />
+                </div>
+                <div class="mb-3">
+                    <label for="role">Vai trò</label>
+                    <select id="role" class="form-select">
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="ADMIN">NHÂN VIÊN</option>
+                        <option value="USER">USER</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="status">Trạng thái</label>
+                    <select id="status" class="form-select">
+                        <option value="1">Hoạt động</option>
+                        <option value="0">Tạm khóa</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="btnSaveUser">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function renderStatusBadge(status) {
+        if (status == null) return '<span class="badge bg-secondary">Unknown</span>';
+        return status === 1 ? '<span class="badge bg-success">Hoạt động</span>' : '<span class="badge bg-warning">Tạm khóa</span>';
+    }
+
+    function loadUsers() {
+        $.ajax({
+            type: 'GET',
+            url: '/admin/users/get-users',
+            success: function (users) {
+                let html = '<table id="userTable" class="table" cellspacing="0" cellpadding="5"><thead>' +
+                    '<tr>' +
+                    '<th>ID</th>' +
+                    '<th>Tài khoản (Email)</th>' +
+                    '<th>Tên người dùng</th>' +
+                    '<th>Số điện thoại</th>' +
+                    '<th>Căn cước công dân/CMND</th>' +
+                    '<th>Vai trò</th>' +
+                    '<th>Trạng thái</th>' +
+                    '<th>Thao tác</th>' +
+                    '</tr></thead><tbody>';
+
+                users.forEach(function (u) {
+                    html += `<tr>
+                        <td class="fw-semibold">${u.id}</td>
+                        <td>${u.email || ''}</td>
+                        <td>${u.username || ''}</td>
+                        <td>${u.phoneNumber || ''}</td>
+                        <td>${u.citizenIdNumber || ''}</td>
+                        <td><span class="badge bg-info">${u.role || ''}</span></td>
+                        <td>${renderStatusBadge(u.status)}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-info me-1" onclick="showEditUser(${u.id})"><i class="bi bi-pencil"></i></button>
+                        </td>
+                    </tr>`;
+                });
+
+                html += '</tbody></table>';
+                $('#userContent').html(html);
+                try {
+                    new DataTable('#userTable');
+                } catch (e) {
+                    console.error('DataTable init error', e);
+                }
+            },
+            error: function (xhr) {
+                $('#userContent').html('<div class="alert alert-danger">Không thể tải dữ liệu người dùng.</div>');
+            }
+        });
+    }
+
+    function showAddUser() {
+        $('#userId').val('');
+        $('#email').val('');
+        $('#password').val('');
+        $('#username').val('');
+        $('#phoneNumber').val('');
+        $('#citizenIdNumber').val('');
+        $('#role').val('USER');
+        $('#status').val('1');
+        const modal = new bootstrap.Modal(document.getElementById('userModal'));
+        modal.show();
+    }
+
+
+    // hàm edit user
+    function showEditUser(id) {
+        $.ajax({
+            type: 'GET',
+            url: `/admin/users/${id}`,
+            success: function (u) {
+                $('#userId').val(u.id);
+                $('#email').val(u.email || '');
+                $('#password').val('');
+                $('#username').val(u.username || '');
+                $('#phoneNumber').val(u.phoneNumber || '');
+                $('#citizenIdNumber').val(u.citizenIdNumber || '');
+                $('#role').val(u.role || 'USER');
+                $('#status').val(u.status != null ? u.status : 1);
+                const modal = new bootstrap.Modal(document.getElementById('userModal'));
+                modal.show();
+            },
+            error: function () {
+                Swal.fire('Lỗi', 'Không thể lấy thông tin người dùng.', 'error');
+            }
+        });
+    }
+
+    // Client-side validation helpers
+    function isValidEmail(email) {
+        if (!email) return false;
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    function isValidPhone(phone) {
+        if (!phone) return true;
+        const normalized = phone.replace(/\s|-/g, '');
+        const re = /^(?:\+84|0)(?:3[2-9]|5(?:6|8|9)|7(?:0|6|7|8|9)|8[1-9]|9[0-9])\d{7}$/;
+        return re.test(normalized);
+    }
+
+    function isValidCitizenId(id) {
+        if (!id) return true; // optional
+        const normalized = id.replace(/\s|-/g, '');
+        const re = /^\d{9}$|^\d{12}$/;
+        return re.test(normalized);
+    }
+
+    function validateUserPayload(payload, isCreate) {
+        if (!payload.email || payload.email.trim() === '') {
+            return {ok: false, msg: 'Email (tài khoản) là bắt buộc.', field: '#email'};
+        }
+        if (!isValidEmail(payload.email)) {
+            return {ok: false, msg: 'Email không hợp lệ.', field: '#email'};
+        }
+        if (isCreate) {
+            if (!payload.password || payload.password.length < 6) {
+                return {ok: false, msg: 'Mật khẩu là bắt buộc và phải có tối thiểu 6 ký tự.', field: '#password'};
+            }
+        } else {
+            if (payload.password && payload.password.length > 0 && payload.password.length < 6) {
+                return {ok: false, msg: 'Nếu thay đổi mật khẩu, tối thiểu 6 ký tự.', field: '#password'};
+            }
+        }
+        if (!payload.username || payload.username.trim().length < 2) {
+            return {ok: false, msg: 'Tên người dùng phải ít nhất 2 ký tự.', field: '#username'};
+        }
+        if (payload.phoneNumber && !isValidPhone(payload.phoneNumber)) {
+            return {ok: false, msg: 'Số điện thoại không hợp lệ.', field: '#phoneNumber'};
+        }
+        if (payload.citizenIdNumber && !isValidCitizenId(payload.citizenIdNumber)) {
+            return {ok: false, msg: 'Căn cước công dân/CMND không hợp lệ (9 hoặc 12 chữ số).', field: '#citizenIdNumber'};
+        }
+        return {ok: true};
+    }
+
+    function saveUser() {
+        const id = $('#userId').val();
+        const payload = {
+            email: $('#email').val(),
+            password: $('#password').val(),
+            username: $('#username').val(),
+            phoneNumber: $('#phoneNumber').val(),
+            citizenIdNumber: $('#citizenIdNumber').val(),
+            role: $('#role').val(),
+            status: parseInt($('#status').val())
+        };
+
+        const isCreate = !id || id === '';
+        const v = validateUserPayload(payload, isCreate);
+        if (!v.ok) {
+            Swal.fire({icon: 'warning', title: 'Sai dữ liệu', text: v.msg}).then(() => {
+                try { $(v.field).focus(); } catch (e) { /* ignore */ }
+            });
+            return;
+        }
+        $('#btnSaveUser').prop('disabled', true);
+
+        if (id) {
+            // update
+            const jq = $.ajax({
+                type: 'PUT',
+                url: `/admin/users/add-user/${id}`,
+                contentType: 'application/json',
+                data: JSON.stringify(payload)
+            }).done(function () {
+                Swal.fire('Thành công', 'Cập nhật người dùng thành công.', 'success').then(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
+                    if (modal) modal.hide();
+                    loadUsers();
+                });
+            }).fail(function (xhr) {
+                let msg = 'Có lỗi khi cập nhật người dùng.';
+                if (xhr && xhr.responseText) msg += '\n' + xhr.responseText;
+                Swal.fire('Lỗi', msg, 'error');
+            }).always(function () {
+                $('#btnSaveUser').prop('disabled', false);
+            });
+
+        } else {
+            // create
+            const jq = $.ajax({
+                type: 'POST',
+                url: `/admin/users/add-user`,
+                contentType: 'application/json',
+                data: JSON.stringify(payload)
+            }).done(function () {
+                Swal.fire('Thành công', 'Tạo người dùng thành công.', 'success').then(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
+                    if (modal) modal.hide();
+                    loadUsers();
+                });
+            }).fail(function (xhr) {
+                let msg = 'Có lỗi khi tạo người dùng.';
+                if (xhr && xhr.responseText) msg += '\n' + xhr.responseText;
+                Swal.fire('Lỗi', msg, 'error');
+            }).always(function () {
+                $('#btnSaveUser').prop('disabled', false);
+            });
+        }
+    }
+
+    function confirmDeleteUser(id) {
+        $.ajax({
+            type: 'GET',
+            url: `/admin/users/${id}/bookings`,
+            success: function (bookings) {
+                if (bookings && bookings.length > 0) {
+                    Swal.fire({
+                        title: 'Người dùng có đặt phòng liên quan',
+                        html: `Người dùng này có <strong>${bookings.length}</strong> đặt phòng liên quan.<br/>Bạn có muốn xóa cả các đặt phòng và người dùng?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Xóa cả (cưỡng chế)',
+                        cancelButtonText: 'Hủy'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // call force-delete
+                            $.ajax({
+                                type: 'DELETE',
+                                url: `/admin/users/force-delete/${id}`,
+                                success: function () {
+                                    Swal.fire('Đã xóa', 'Đã xóa người dùng và các đặt phòng liên quan.', 'success').then(() => loadUsers());
+                                },
+                                error: function (xhr) {
+                                    let msg = 'Không thể xóa người dùng.';
+                                    try {
+                                        if (xhr && xhr.responseText && xhr.responseText.trim().length > 0) {
+                                            msg = xhr.responseText;
+                                        }
+                                    } catch (e) {}
+                                    Swal.fire('Lỗi', msg, 'error');
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Bạn có chắc muốn xoá?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Có'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'DELETE',
+                                url: `/admin/users/delete-user/${id}`,
+                                success: function () {
+                                    Swal.fire('Đã xoá', '', 'success').then(() => loadUsers());
+                                },
+                                error: function (xhr) {
+                                    let msg = 'Không thể xoá người dùng.';
+                                    try {
+                                        if (xhr && xhr.responseText && xhr.responseText.trim().length > 0) {
+                                            msg = xhr.responseText;
+                                        }
+                                    } catch (e) {}
+                                    Swal.fire('Lỗi', msg, 'error');
+                                }
+                            });
+                        }
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: 'Bạn có chắc muốn xoá?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Có'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: `/admin/users/delete-user/${id}`,
+                            success: function () {
+                                Swal.fire('Đã xoá', '', 'success').then(() => loadUsers());
+                            },
+                            error: function (xhr) {
+                                let msg = 'Không thể xoá người dùng.';
+                                try {
+                                    if (xhr && xhr.responseText && xhr.responseText.trim().length > 0) {
+                                        msg = xhr.responseText;
+                                    }
+                                } catch (e) {}
+                                Swal.fire('Lỗi', msg, 'error');
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        loadUsers();
+        $('#btnAddUser').on('click', showAddUser);
+        $('#btnSaveUser').on('click', saveUser);
+    });
+</script>
 </body>
 </html>

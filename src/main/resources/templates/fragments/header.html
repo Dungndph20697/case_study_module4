@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="vi">
 <body>
 <!-- fragment header -->
 <div th:fragment="header">
@@ -18,8 +18,28 @@
                         <button type="submit" class="btn btn-primary">Tìm</button>
                     </form>
                     <li class="nav-item"><a class="nav-link" th:href="@{/user/bang-dieu-khien}">Trang chủ</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/login}">Đăng nhập</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Đăng xuất</a></li>
+
+                    <!-- Show login for anonymous users -->
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/login}">Đăng nhập</a>
+                    </li>
+
+                    <!-- Show user dropdown (including logout) for authenticated users -->
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i>
+                            <span th:text="${#authentication.name}">User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                            <li>
+                                <form th:action="@{/logout}" method="post" class="m-0">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                    <button type="submit" class="btn btn-link dropdown-item" style="padding:0; border:none; color:inherit;">Đăng xuất</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+
                 </ul>
             </div>
         </div>

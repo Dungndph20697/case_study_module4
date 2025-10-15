@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
+@ToString
 @Entity
 @Table(name = "bookings")
 public class Booking {
@@ -24,6 +25,8 @@ public class Booking {
     private LocalDateTime checkOutDate;
 
     private Integer status;
+
+    private String note;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

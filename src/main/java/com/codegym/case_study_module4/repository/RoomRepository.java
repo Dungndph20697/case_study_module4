@@ -8,10 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+
+import java.time.LocalDateTime;
+
 import java.util.List;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
+
 
     //  Lấy tất cả phòng có ảnh (nếu bạn có quan hệ @OneToMany)
     @Query("SELECT DISTINCT r FROM Room r LEFT JOIN FETCH r.images")
@@ -30,4 +34,16 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     @Query("SELECT r FROM Room r WHERE LOWER(r.numberRoom) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(r.typeRoom) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Room> searchRoomsNoPage(@Param("keyword") String keyword);
+
+    @Query("SELECT r FROM Room r WHERE r.id NOT IN (" +
+            "SELECT b.room.id FROM Booking b WHERE " +
+            "(:checkIn BETWEEN b.checkInDate AND b.checkOutDate OR " +
+            ":checkOut BETWEEN b.checkInDate AND b.checkOutDate OR " +
+            "b.checkInDate BETWEEN :checkIn AND :checkOut OR " +
+            "b.checkOutDate BETWEEN :checkIn AND :checkOut) AND b.status IN (0, 1))")
+    List<Room> findAvailableRooms(
+            @Param("checkIn") LocalDateTime checkIn,
+            @Param("checkOut") LocalDateTime checkOut
+    );
+
 }

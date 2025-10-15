@@ -157,7 +157,22 @@ main {
     padding: 10px;
 }
 
+
 /* Responsive */
 @media (max-width: 992px) {
     main { margin-left: 0; }
+
+content-wrapper{
+    background-color: black;
+}
+
+.room-card-selected {
+    border: 2px solid #ffc107 !important;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+    background-color: #fffbea;
+}
+.btn-choose.active {
+    background-color: #ffc107;
+    color: white;
+
 }
