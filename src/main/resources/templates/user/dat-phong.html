@@ -71,6 +71,7 @@
             type: "GET",
             url: '/user/get-rooms-available?checkIn=' + checkInDate + '&checkOut=' + checkOutDate,
             success: function (rooms) {
+                console.log(rooms);
                 let html = '';
                 rooms.forEach(function (r) {
                     html += `<div class="col-md-6 col-lg-4">
