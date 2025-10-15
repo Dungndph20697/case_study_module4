@@ -70,7 +70,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content rounded-4 shadow-lg">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalLabel">
+                    <h5 class="modal-title" id="modalLabel1">
                         <i class="bi bi-info-circle me-2"></i> Chi tiết đặt phòng
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -131,6 +131,51 @@
         </div>
     </div>
 
+    <!-- Modal update đặt phòng -->
+    <div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalLabel">
+                        <i class="bi bi-info-circle me-2"></i> Sửa thời gian đặt phòng
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="hidden" id="idUpdate">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Ngày nhận phòng:</strong> <span id="checkInUpdate"></span></p>
+                            <input type="datetime-local" name="ngayDen" id="ngayDen" class="form-control"
+                                   onchange="loadTongTienAndSoDem()" required>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Ngày trả phòng:</strong> <span id="checkOutUpdate"></span></p>
+                            <input type="datetime-local" name="ngayDi" id="ngayDi" class="form-control"
+                                   onchange="loadTongTienAndSoDem()" required>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Số đêm:</strong> <span id="soDemUpdate"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Tổng tiền:</strong> <span id="tongTienUpdate"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="showBntUpdate"></div>
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <!-- include dependencies used by other pages (keeps consistent with room page) -->
@@ -145,10 +190,38 @@
         crossorigin="anonymous"></script>
 <script th:inline="none">
     const modalDetail = new bootstrap.Modal(document.getElementById('exampleModal'), {})
+    const modalDetailUpdate = new bootstrap.Modal(document.getElementById('exampleModalUpdate'), {})
+
+
+    function loadTongTienAndSoDem() {
+        const checkInDate = $("#ngayDen").val();
+        const checkOutDate = $("#ngayDi").val();
+        const id = $("#idUpdate").val();
+        if (checkInDate && checkOutDate) {
+            $.ajax({
+                type: "GET",
+                url: `/admin/bookings/get-booking/${id}`,
+                success: function (b) {
+                    const nights = computeNights(checkInDate, checkOutDate);
+                    const roomPrice = (b.room && b.room.price) ? b.room.price : null;
+                    let total = '';
+                    if (roomPrice) {
+                        const nightsVal = nights || 0; // nếu nights = '' thì = 0
+                        total = new Intl.NumberFormat('vi-VN').format(
+                            (nightsVal > 0 ? nightsVal : 1) * roomPrice
+                        ) + 'đ';
+                    }
+                    $("#tongTienUpdate").html(total)
+                    $("#soDemUpdate").html(nights);
+                }
+            });
+
+
+        }
+    }
 
     function btnXacNhan(status) {
         const id = $("#id").val();
-        console.log(id);
         $.ajax({
             type: "PUT",
             url: `/admin/bookings/change-staus/${id}?status=${status}`,
@@ -167,6 +240,7 @@
         modalDetail.show();
     }
 
+
     function showMoalDetail(id) {
         $.ajax({
             type: "GET",
@@ -176,6 +250,11 @@
                 let total = '';
                 if (nights && b.room.price) {
                     total = new Intl.NumberFormat('vi-VN').format(nights * b.room.price) + 'đ';
+                }
+                let showBth = '';
+                if (b.status === 0) {
+                    showBth = `<button type="button" class="btn btn-success" aria-label="Xác nhận" onclick="btnXacNhan(1)">Xác nhận</button>
+                               <button type="button" class="btn btn-danger ms-2" aria-label="Hủy" onclick="btnXacNhan(2)">Hủy</button>`;
                 }
                 $("#id").val(b.id)
                 $("#code").html(b.code)
@@ -192,20 +271,155 @@
                 $("#phone").html(b.user.phoneNumber)
                 $("#soDem").html(nights)
                 $("#tongTien").html(total)
-                let showBth = "";
-                if (b.status === 0) {
-                    showBth = `<button type="button" class="btn btn-success" aria-label="Xác nhận" onclick="btnXacNhan(1)">Xác
-                        nhận
-                    </button>
-                    <button type="button" class="btn btn-danger" aria-label="Huỷ" onclick="btnXacNhan(2)">Huỷ
-                    </button>`;
-                }
                 $("#showBtn").html(showBth);
             }
         });
         modalDetail.show();
     }
 
+    function btnXacNhanUpdate() {
+        const id = $("#idUpdate").val();
+        const checkInDate = $("#ngayDen").val();
+        const checkOutDate = $("#ngayDi").val();
+
+        // Convert sang Date object để so sánh
+        const now = new Date();
+        const checkIn = new Date(checkInDate);
+        const checkOut = new Date(checkOutDate);
+
+        if (checkIn < now.setHours(0, 0, 0, 0)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ngày đến không hợp lệ',
+                text: 'Ngày đến không được nhỏ hơn ngày hiện tại!',
+            });
+            return;
+        }
+
+        if (checkOut <= checkIn) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ngày đi không hợp lệ',
+                text: 'Ngày đi phải sau ngày đến!',
+            });
+            return;
+        }
+        $.ajax({
+            type: "PUT",
+            url: `/admin/bookings/change-datetime/${id}`,
+            contentType: "application/json",
+            data: JSON.stringify({
+                checkInDate: checkInDate,
+                checkOutDate: checkOutDate,
+            }),
+            success: function () {
+
+                loadBookings();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: 'Cập nhật đặt phòng thành công!',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                modalDetailUpdate.hide();
+            }
+        });
+
+    }
+
+    function btnTraPhong(){
+        const id = $("#idUpdate").val();
+        const checkInDate = $("#ngayDen").val();
+        const checkOutDate = $("#ngayDi").val();
+
+        const checkIn = new Date(checkInDate);
+        const checkOut = new Date(checkOutDate);
+
+
+
+        if (checkOut <= checkIn) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ngày đi không hợp lệ',
+                text: 'Ngày đi phải sau ngày đến!',
+            });
+            return;
+        }
+        $.ajax({
+            type: "PUT",
+            url: `/admin/bookings/checkout/${id}`,
+            contentType: "application/json",
+            data: JSON.stringify({
+                checkOutDate: checkOutDate,
+            }),
+            success: function () {
+
+                loadBookings();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: 'Checkout phòng thành công!',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                modalDetailUpdate.hide();
+            }
+        });
+    }
+
+    function showMoalUpdate(id) {
+        $.ajax({
+            type: "GET",
+            url: `/admin/bookings/get-booking/${id}`,
+            success: function (b) {
+                $("#idUpdate").val(b.id)
+                $("#ngayDen").val(b.checkInDate)
+                $("#ngayDi").val(b.checkOutDate)
+                const nights = computeNights(b.checkInDate, b.checkOutDate);
+                // room price may be nested under b.room.price
+                const roomPrice = (b.room && b.room.price) ? b.room.price : null;
+                let total = '';
+                if (roomPrice) {
+                    const nightsVal = nights || 0; // nếu nights = '' thì = 0
+                    total = new Intl.NumberFormat('vi-VN').format(
+                        (nightsVal > 0 ? nightsVal : 1) * roomPrice
+                    ) + 'đ';
+                }
+                let showBntUpdate = '';
+                if (b.status === 0) {
+                    showBntUpdate = `<button type="button" class="btn btn-success" aria-label="Xác nhận" onclick="btnXacNhanUpdate()">Xác nhận</button>`;
+                } else if (b.status === 1) {
+                    showBntUpdate = `<button type="button" class="btn btn-success" aria-label="Xác nhận" onclick="btnTraPhong()">Trả phòng</button>`;
+                }
+                $("#showBntUpdate").html(showBntUpdate)
+                $("#showBnt").html(total)
+                $("#tongTienUpdate").html(total)
+                $("#soDemUpdate").html(nights)
+            }
+        });
+        modalDetailUpdate.show();
+    }
+
+    // function btnTraPhong() {
+    //     const id = $("#idUpdate").val();
+    //     $.ajax({
+    //         type: "PUT",
+    //         url: `/admin/bookings/change-staus/${id}?status=3`,
+    //         success: function (b) {
+    //             modalDetailUpdate.hide();
+    //             loadBookings();
+    //             Swal.fire({
+    //                 icon: 'success',
+    //                 title: 'Thành công',
+    //                 text: 'Cập nhật trạng thái đặt phòng thành công!',
+    //                 timer: 2000,
+    //                 showConfirmButton: false
+    //             });
+    //         }
+    //     });
+    //     modalDetailUpdate.show();
+    // }
 
 
     function statusBadge(status) {
@@ -284,7 +498,6 @@
                     '</tr></thead><tbody>';
 
                 bookings.forEach(function (b) {
-                    console.log(b);
                     // b is a Booking entity. Use nested fields safely.
                     const checkIn = formatDateTime(b.checkInDate);
                     const checkOut = formatDateTime(b.checkOutDate);
@@ -301,6 +514,10 @@
 
                     const userName = (b.user && b.user.username) ? b.user.username : '';
                     const roomNumber = (b.room && b.room.numberRoom) ? b.room.numberRoom : '';
+                    let btnUpdate = ``;
+                    if (b.status === 0 || b.status === 1) {
+                        btnUpdate += `<button class="btn btn-sm btn-outline-info me-1" onclick="showMoalUpdate(${b.id})"><i class="bi bi-pencil"></i></button>`;
+                    }
 
                     html += `<tr>
                             <td class="fw-semibold">${b.code ? b.code : ('#' + (b.id || ''))}</td>
@@ -313,7 +530,7 @@
                             <td>${statusBadge(b.status)}</td>
                             <td>
                                 <button class="btn btn-sm btn-outline-info me-1" onclick="showMoalDetail(${b.id})"><i class="bi bi-eye"></i></button>
-<!--                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>-->
+                                ${btnUpdate}
                             </td>
                         </tr>`;
                 });

@@ -19,7 +19,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     void deleteByUserId(@Param("userId") Long userId);
 
     @Modifying
-    @Query("UPDATE Booking b SET b.status = 3 WHERE b.checkOutDate <= :now AND b.status <> 3")
+    @Query("UPDATE Booking b SET b.status = 3 WHERE b.checkOutDate <= :now AND b.status = 1")
     int updateStatusWhenExpired(@Param("now") LocalDateTime now);
 
 }

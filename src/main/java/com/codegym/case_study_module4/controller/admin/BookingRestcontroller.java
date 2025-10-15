@@ -29,6 +29,24 @@ public class BookingRestcontroller {
         return ResponseEntity.ok(booking.get());
     }
 
+    @PutMapping("/bookings/change-datetime/{id}")
+    public ResponseEntity<Booking> getAllBookings(@PathVariable Long id, @RequestBody Booking booking) {
+        Optional<Booking> bookingUpdate = bookingService.findById(id);
+        bookingUpdate.get().setId(id);
+        bookingUpdate.get().setCheckInDate(booking.getCheckInDate());
+        bookingUpdate.get().setCheckOutDate(booking.getCheckOutDate());
+        return ResponseEntity.ok(bookingService.save(bookingUpdate.get()));
+    }
+
+    @PutMapping("/bookings/checkout/{id}")
+    public ResponseEntity<Booking> checkout(@PathVariable Long id, @RequestBody Booking booking) {
+        Optional<Booking> bookingUpdate = bookingService.findById(id);
+        bookingUpdate.get().setId(id);
+        bookingUpdate.get().setCheckOutDate(booking.getCheckOutDate());
+        bookingUpdate.get().setStatus(3);
+        return ResponseEntity.ok(bookingService.save(bookingUpdate.get()));
+    }
+
     @PutMapping("/bookings/change-staus/{id}")
     public ResponseEntity<Booking> getAllBookings(@PathVariable Long id, @RequestParam("status") Integer status) {
         Optional<Booking> booking = bookingService.findById(id);
