@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Controller
 @RequestMapping("/user")
@@ -40,6 +41,9 @@ public class UserController {
 
     @Autowired
     private IBookingService bookingService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/bang-dieu-khien")
     public String userDashboard() {
@@ -109,7 +113,10 @@ public class UserController {
                          Principal principal,
                          RedirectAttributes redirectAttributes,
                          HttpSession session,
-                         Model model) {
+                         Model model,
+                         @org.springframework.web.bind.annotation.RequestParam(value = "password", required = false) String newPassword,
+                         @org.springframework.web.bind.annotation.RequestParam(value = "currentPassword", required = false) String currentPassword,
+                         @org.springframework.web.bind.annotation.RequestParam(value = "confirmPassword", required = false) String confirmPassword) {
         if (principal == null) {
             return "redirect:/login";
         }
@@ -144,6 +151,38 @@ public class UserController {
         // Các trường khác cho phép cập nhật (không chạm password/role/email)
         user.setUsername(userForm.getUsername());
         user.setPhoneNumber(userForm.getPhoneNumber());
+
+        // If user attempts to change password (currentPassword provided), validate and update
+        if (currentPassword != null && !currentPassword.trim().isEmpty()) {
+            // Validate new password presence
+            if (newPassword == null || newPassword.trim().isEmpty()) {
+                model.addAttribute("modalOpen", true);
+                model.addAttribute("modalError", "Vui lòng nhập mật khẩu mới.");
+                model.addAttribute("userForm", userForm);
+                return "user/thong-tin";
+            }
+            if (newPassword.trim().length() < 6) {
+                model.addAttribute("modalOpen", true);
+                model.addAttribute("modalError", "Mật khẩu mới phải có tối thiểu 6 ký tự.");
+                model.addAttribute("userForm", userForm);
+                return "user/thong-tin";
+            }
+            if (!newPassword.equals(confirmPassword)) {
+                model.addAttribute("modalOpen", true);
+                model.addAttribute("modalError", "Xác nhận mật khẩu mới không khớp.");
+                model.addAttribute("userForm", userForm);
+                return "user/thong-tin";
+            }
+            // Verify current password
+            if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+                model.addAttribute("modalOpen", true);
+                model.addAttribute("modalError", "Mật khẩu hiện tại không chính xác.");
+                model.addAttribute("userForm", userForm);
+                return "user/thong-tin";
+            }
+            // All good - set encoded new password
+            user.setPassword(passwordEncoder.encode(newPassword));
+        }
 
         userService.save(user);
 
@@ -180,5 +219,7 @@ public class UserController {
         redirectAttributes.addFlashAttribute("success", "Cập nhật thông tin thành công");
         return "redirect:/user/thong-tin";
     }
+
+    // update-ajax handler moved to UserRestController to keep AJAX API under a @RestController
 
 }
