@@ -5,6 +5,7 @@ import com.codegym.case_study_module4.model.Room;
 import com.codegym.case_study_module4.model.Users;
 import com.codegym.case_study_module4.service.IBookingService;
 import com.codegym.case_study_module4.service.IUserService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.codegym.case_study_module4.service.IRoomService;
@@ -14,6 +15,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
@@ -250,6 +253,32 @@ public class UserRestController {
         Booking booking = optionalBooking.get();
         booking.setStatus(2);
         return ResponseEntity.ok(bookingService.save(booking));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody @Valid Users user, BindingResult result) {
+
+        if (result.hasErrors()) {
+            // Lấy lỗi đầu tiên để trả về
+            String error = result.getAllErrors().get(0).getDefaultMessage();
+            return ResponseEntity.badRequest().body(error);
+        }
+
+        // Kiểm tra email hoặc username đã tồn tại
+        if (userService.existsByEmailIgnoreCase(user.getEmail())) {
+            return ResponseEntity.badRequest().body("Email đã được sử dụng!");
+        }
+        if (userService.existsByCitizenIdNumber(user.getCitizenIdNumber())) {
+            return ResponseEntity.badRequest().body("Cccd đã được sử dụng!");
+        }
+
+        // Mã hóa mật khẩu
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setRole("USER");
+        user.setStatus(1);
+
+        userService.save(user);
+        return ResponseEntity.ok().build();
     }
 
 }

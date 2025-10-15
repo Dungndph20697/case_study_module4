@@ -21,12 +21,9 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email">
+                    <input type="email" class="form-control" id="email" required>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Mật khẩu</label>
-                    <input type="password" class="form-control" id="password" required>
-                </div>
+
                 <div class="mb-3">
                     <label class="form-label">Số điện thoại</label>
                     <input type="text" class="form-control" id="phoneNumber" required>
@@ -35,8 +32,19 @@
                     <label class="form-label">CCCD</label>
                     <input type="text" class="form-control" id="citizenIdNumber" required>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Mật khẩu</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <div class="mb-3">
+                    <label>Nhập lại mật khẩu</label>
+                    <input type="password" id="confirmPassword" class="form-control" required minlength="6">
+                </div>
 
                 <div class="text-center">
+                    <button type="button" id="btnBackLogin" class="btn btn-outline-secondary">
+                        ← Quay lại đăng nhập
+                    </button>
                     <button type="submit" class="btn btn-primary w-50">Đăng ký</button>
                 </div>
             </form>
@@ -45,8 +53,21 @@
 </div>
 
 <script>
+    $("#btnBackLogin").on("click", function () {
+        window.location.href = "/login";
+    });
+
     $("#registerForm").on("submit", function (e) {
         e.preventDefault();
+
+        const password = $("#password").val().trim();
+        const confirmPassword = $("#confirmPassword").val().trim();
+
+        // ✅ Kiểm tra nhập lại mật khẩu
+        if (password !== confirmPassword) {
+            Swal.fire("Lỗi", "Mật khẩu nhập lại không khớp!", "warning");
+            return;
+        }
 
         const user = {
             username: $("#username").val(),
@@ -70,7 +91,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/register",
+            url: "/user/register",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(user),
             success: function () {
@@ -82,6 +103,9 @@
                     showConfirmButton: false
                 });
                 $("#registerForm")[0].reset();
+                setTimeout(() => {
+                    window.location.href = "/login";
+                }, 2000);
             },
             error: function (xhr) {
                 Swal.fire("Lỗi", xhr.responseText || "Đăng ký thất bại!", "error");
