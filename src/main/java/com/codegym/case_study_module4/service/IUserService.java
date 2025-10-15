@@ -12,4 +12,6 @@ public interface IUserService extends IGenerateService<Users>{
     boolean existsByCitizenIdNumber(String citizenIdNumber);
 
     Optional<Users> findByCitizenIdNumber(String citizenIdNumber);
+
+    Users findUsersByEmail(String email);
 }

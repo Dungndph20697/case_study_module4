@@ -6,6 +6,8 @@ import com.codegym.case_study_module4.service.IBookingService;
 import com.codegym.case_study_module4.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.codegym.case_study_module4.service.IRoomService;
+import com.codegym.case_study_module4.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,11 @@ public class UserRestController {
 
     @Autowired
     private IUserService userService;
+
+
+    @Autowired
+    private IRoomService roomService;
+
 
     @Autowired
     private IBookingService bookingService;
@@ -194,4 +201,38 @@ public class UserRestController {
             return resp;
         }
     }
+    @PostMapping("/dat-phong")
+    public ResponseEntity<Booking> datPhong(@RequestBody Booking booking) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Users user = userService.findUsersByEmail(username);
+        Long userId = user.getId();
+        booking.setUser(Users.builder().id(userId).build());
+        booking.setStatus(0);
+        booking.setCode(bookingService.generateBookingCode());
+        return ResponseEntity.ok(bookingService.save(booking));
+    }
+
+    @GetMapping("/get-bookings-user")
+    public ResponseEntity<List<Booking>> getBookingsForUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // hoặc getPrincipal().toString()
+
+        Users user = userService.findUsersByEmail(username);
+        Long userId = user.getId();
+        List<Booking> bookings = bookingService.findByUserId(userId);
+        return ResponseEntity.ok(bookings);
+    }
+
+    @PutMapping("/huy-dat-phong/{id}")
+    public ResponseEntity<Booking> datPhong(@PathVariable Long id) {
+        Optional<Booking> optionalBooking = bookingService.findById(id);
+        if (!optionalBooking.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        Booking booking = optionalBooking.get();
+        booking.setStatus(2);
+        return ResponseEntity.ok(bookingService.save(booking));
+    }
+
 }

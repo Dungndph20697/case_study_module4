@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -16,4 +17,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Modifying
     @Query("delete from Booking b where b.user.id = :userId")
     void deleteByUserId(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("UPDATE Booking b SET b.status = 3 WHERE b.checkOutDate <= :now AND b.status = 1")
+    int updateStatusWhenExpired(@Param("now") LocalDateTime now);
+
 }

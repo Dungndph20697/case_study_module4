@@ -37,7 +37,7 @@ public class UserService implements IUserService, UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    public Optional<Users> findByEmailIgnoreCaseInternal(String email) {
+    public Optional<Users> find(String email) {
         return Optional.ofNullable(userRepository.findByEmailIgnoreCase(email));
     }
 
@@ -59,6 +59,11 @@ public class UserService implements IUserService, UserDetailsService {
 
     public Optional<Users> findByCitizenIdNumber(String citizenIdNumber) {
         return Optional.ofNullable(userRepository.findByCitizenIdNumber(citizenIdNumber));
+    }
+
+    @Override
+    public Users findUsersByEmail(String email) {
+        return userRepository.findUsersByEmail(email);
     }
 
     // Implemented to satisfy compiled interface requirements (some builds expect this method)

@@ -51,6 +51,11 @@ public class UserController {
         return "user/bang-dieu-khien";
     }
 
+    @GetMapping("/lich-su")
+    public String userLichSu() {
+        return "user/lich-su";
+    }
+
     @GetMapping("/dat-phong")
     public String userDatPhong() {
         logger.debug("Entered userDatPhong() -> returning user/dat-phong");

@@ -31,15 +31,7 @@
                         <i class="bi bi-check-circle"></i> Xác nhận đặt phòng
                     </button>
                 </div>
-                <!--                <div class="mb-3">-->
-                <!--                    <label class="form-label">Chọn loại phòng</label>-->
-                <!--                    <select class="form-select" name="loaiPhong" id="loaiPhong" required>-->
-                <!--                        <option value="Phòng đơn">Phòng đơn</option>-->
-                <!--                        <option value="Phòng đôi">Phòng đôi</option>-->
-                <!--                        <option value="Phòng vip">Phòng VIP</option>-->
-                <!--                        <option value="vip">Phòng tổng thống</option>-->
-                <!--                    </select>-->
-                <!--                </div>-->
+
             </div>
             <div class="row g-4" id="loadRoom">
             </div>
@@ -71,6 +63,7 @@
             type: "GET",
             url: '/user/get-rooms-available?checkIn=' + checkInDate + '&checkOut=' + checkOutDate,
             success: function (rooms) {
+                console.log(rooms);
                 let html = '';
                 rooms.forEach(function (r) {
                     html += `<div class="col-md-6 col-lg-4">
@@ -141,7 +134,43 @@
         const checkInDate = $("#ngayDen").val();
         const checkOutDate = $("#ngayDi").val();
         const note = $("#ghiChu").val();
-        const room = 1;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // bỏ phần giờ phút giây để so sánh đúng ngày
+
+        const inDate = new Date(checkInDate);
+        const outDate = new Date(checkOutDate);
+
+        if (!checkInDate || !checkOutDate) {
+            Swal.fire({
+                title: 'Thiếu thông tin!',
+                text: 'Vui lòng chọn ngày đến và ngày đi.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        if (inDate < today) {
+            Swal.fire({
+                title: 'Ngày đến không hợp lệ!',
+                text: 'Ngày đến không được nhỏ hơn ngày hiện tại.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        if (outDate <= inDate) {
+            Swal.fire({
+                title: 'Ngày đi không hợp lệ!',
+                text: 'Ngày đi phải lớn hơn ngày đến.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+
         if (!window.selectedRoomId) {
             Swal.fire({
                 title: 'Error!',
@@ -169,8 +198,8 @@
                     confirmButtonText: 'OK'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $('#checkInDate').val('');
-                        $('#checkOutDate').val('');
+                        $('#ngayDen').val('');
+                        $('#ngayDi').val('');
                         $('#note').val('');
                         window.selectedRoomId = null;
                         $('.room-item.active').removeClass('active');
