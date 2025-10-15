@@ -16,7 +16,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             "(:checkIn BETWEEN b.checkInDate AND b.checkOutDate OR " +
             ":checkOut BETWEEN b.checkInDate AND b.checkOutDate OR " +
             "b.checkInDate BETWEEN :checkIn AND :checkOut OR " +
-            "b.checkOutDate BETWEEN :checkIn AND :checkOut))")
+            "b.checkOutDate BETWEEN :checkIn AND :checkOut) AND b.status IN (0, 1))")
     List<Room> findAvailableRooms(
             @Param("checkIn") LocalDateTime checkIn,
             @Param("checkOut") LocalDateTime checkOut

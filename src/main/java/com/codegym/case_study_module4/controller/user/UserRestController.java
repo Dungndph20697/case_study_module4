@@ -57,4 +57,15 @@ public class UserRestController {
         return ResponseEntity.ok(bookings);
     }
 
+    @PutMapping("/huy-dat-phong/{id}")
+    public ResponseEntity<Booking> datPhong(@PathVariable Long id) {
+        Optional<Booking> optionalBooking = bookingService.findById(id);
+        if (!optionalBooking.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        Booking booking = optionalBooking.get();
+        booking.setStatus(2);
+        return ResponseEntity.ok(bookingService.save(booking));
+    }
+
 }
