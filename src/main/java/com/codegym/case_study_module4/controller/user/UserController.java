@@ -220,6 +220,9 @@ public class UserController {
         return "redirect:/user/thong-tin";
     }
 
-    // update-ajax handler moved to UserRestController to keep AJAX API under a @RestController
+    @GetMapping("/form-register")
+    public String formRegister() {
+        return "auth/dang-ky";
+    }
 
 }

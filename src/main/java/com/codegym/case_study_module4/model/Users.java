@@ -35,6 +35,8 @@ public class Users implements UserDetails {
 
     private String role;
 
+    @NotBlank(message = "Email không được để trống")
+    @Pattern(regexp = "^[\\w.-]+@[\\w.-]+\\.\\w{2,}$", message = "Email không hợp lệ")
     private String email;
 
     @NotBlank(message = "Số điện thoại không được để trống")
