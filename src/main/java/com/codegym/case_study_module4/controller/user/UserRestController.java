@@ -1,6 +1,7 @@
 package com.codegym.case_study_module4.controller.user;
 
 import com.codegym.case_study_module4.model.Booking;
+import com.codegym.case_study_module4.model.Room;
 import com.codegym.case_study_module4.model.Users;
 import com.codegym.case_study_module4.service.IBookingService;
 import com.codegym.case_study_module4.service.IUserService;
@@ -9,15 +10,18 @@ import org.slf4j.LoggerFactory;
 import com.codegym.case_study_module4.service.IRoomService;
 import com.codegym.case_study_module4.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -201,6 +205,19 @@ public class UserRestController {
             return resp;
         }
     }
+
+
+    @GetMapping("/get-rooms-available")
+    public ResponseEntity<List<Room>> userDatPhong(@RequestParam("checkIn") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkIn,
+                                                   @RequestParam("checkOut") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime checkOut) {
+        return ResponseEntity.ok(roomService.findAvailableRooms(checkIn, checkOut));
+    }
+
+    @GetMapping("/get-rooms")
+    public ResponseEntity<List<Room>> userDatPhong() {
+        return ResponseEntity.ok(roomService.findAll());
+    }
+
     @PostMapping("/dat-phong")
     public ResponseEntity<Booking> datPhong(@RequestBody Booking booking) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -216,7 +233,7 @@ public class UserRestController {
     @GetMapping("/get-bookings-user")
     public ResponseEntity<List<Booking>> getBookingsForUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName(); // hoặc getPrincipal().toString()
+        String username = authentication.getName(); //
 
         Users user = userService.findUsersByEmail(username);
         Long userId = user.getId();
