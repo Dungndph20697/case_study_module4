@@ -206,17 +206,7 @@
         modalDetail.show();
     }
 
-    function computeNights(checkIn, checkOut) {
-        try {
-            const d1 = new Date(checkIn);
-            const d2 = new Date(checkOut);
-            if (isNaN(d1) || isNaN(d2)) return '';
-            const diff = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
-            return diff > 0 ? diff : '';
-        } catch (e) {
-            return '';
-        }
-    }
+
 
     function statusBadge(status) {
         if (status == null) return '<span class="badge bg-secondary">Unknown</span>';
@@ -231,6 +221,20 @@
                 return '<span class="badge bg-secondary">Đã trả phòng</span>';
             default:
                 return '<span class="badge bg-secondary">Khác</span>';
+        }
+    }
+
+    function computeNights(checkIn, checkOut) {
+        try {
+            const d1 = new Date(checkIn);
+            const d2 = new Date(checkOut);
+            if (isNaN(d1) || isNaN(d2)) return '';
+            let diff = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+            // Tối thiểu 1 đêm
+            if (diff <= 0) diff = 1;
+            return diff;
+        } catch (e) {
+            return '';
         }
     }
 
@@ -280,6 +284,7 @@
                     '</tr></thead><tbody>';
 
                 bookings.forEach(function (b) {
+                    console.log(b);
                     // b is a Booking entity. Use nested fields safely.
                     const checkIn = formatDateTime(b.checkInDate);
                     const checkOut = formatDateTime(b.checkOutDate);
@@ -287,8 +292,11 @@
                     // room price may be nested under b.room.price
                     const roomPrice = (b.room && b.room.price) ? b.room.price : null;
                     let total = '';
-                    if (nights && roomPrice) {
-                        total = new Intl.NumberFormat('vi-VN').format(nights * roomPrice) + 'đ';
+                    if (roomPrice) {
+                        const nightsVal = nights || 0; // nếu nights = '' thì = 0
+                        total = new Intl.NumberFormat('vi-VN').format(
+                            (nightsVal > 0 ? nightsVal : 1) * roomPrice
+                        ) + 'đ';
                     }
 
                     const userName = (b.user && b.user.username) ? b.user.username : '';
