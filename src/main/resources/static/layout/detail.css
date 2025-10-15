@@ -1,0 +1,70 @@
+/* Toàn bộ layout chi tiết phòng */
+#user-dashboard {
+    display: flex;
+    min-height: 100vh;
+    background: linear-gradient(to right, #f8faff, #e6ecff);
+}
+
+/* Sidebar bên trái */
+#user-dashboard .col-md-3 {
+    background: #f9f9fb;
+    min-height: 100vh;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Khu nội dung chính */
+#user-dashboard .col-md-9 {
+    flex: 1;
+    padding: 10px 20px;
+    background: transparent;
+}
+
+/* Card hiển thị thông tin phòng */
+.card {
+    width: 100%;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    background: #fff;
+}
+
+/* Ảnh phòng */
+.card img {
+    height: 1000px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+/* Tiêu đề và thông tin phòng */
+.card-body {
+    padding: 2rem;
+}
+
+/* Nút trở lại */
+.btn-outline-secondary {
+    border-radius: 10px;
+}
+
+/* Responsive: trên màn hình nhỏ, thu gọn sidebar */
+@media (max-width: 992px) {
+    #user-dashboard {
+        flex-direction: column;
+    }
+
+    #user-dashboard .col-md-3 {
+        width: 100%;
+        min-height: auto;
+        box-shadow: none;
+    }
+
+    #user-dashboard .col-md-9 {
+        width: 100%;
+        padding: 10px 15px;
+    }
+
+    .card img {
+        height: 300px;
+    }
+}
+

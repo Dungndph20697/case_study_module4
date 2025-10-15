@@ -3,6 +3,9 @@ package com.codegym.case_study_module4.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,8 +24,16 @@ public class Room {
     private String typeRoom;
 
     private Double price;
-
-    private Integer statusRoom;
+    @Enumerated(EnumType.STRING)
+    private Status statusRoom;
 
     private String description;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Image> images = new ArrayList<>();
+
+    public enum Status {
+        AVAILABLE,
+        BOOKED;
+    }
 }
