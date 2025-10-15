@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -24,6 +27,7 @@ public class Users implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Họ và tên không được để trống")
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -33,10 +37,14 @@ public class Users implements UserDetails {
 
     private String email;
 
+    @NotBlank(message = "Số điện thoại không được để trống")
+    @Pattern(regexp = "\\d{9,11}", message = "Số điện thoại không hợp lệ (9-11 chữ số)")
     private String phoneNumber;
 
     private Integer status;
 
+    @NotBlank(message = "CCCD không được để trống")
+    @Pattern(regexp = "\\d{9,12}", message = "CCCD không hợp lệ (9-12 chữ số)")
     private String citizenIdNumber;
 
     @Override
