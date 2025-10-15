@@ -1,35 +1,39 @@
 package com.codegym.case_study_module4.controller.user;
 
 
-import com.codegym.case_study_module4.dto.UserProfileDto;
 import com.codegym.case_study_module4.model.Booking;
 import com.codegym.case_study_module4.model.Users;
 import com.codegym.case_study_module4.service.IBookingService;
 import com.codegym.case_study_module4.service.IUserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-
-import com.codegym.case_study_module4.service.IRoomService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private IUserService userService;
@@ -39,6 +43,7 @@ public class UserController {
 
     @GetMapping("/bang-dieu-khien")
     public String userDashboard() {
+        logger.debug("Entered userDashboard() -> returning user/bang-dieu-khien");
         return "user/bang-dieu-khien";
     }
 
@@ -49,32 +54,57 @@ public class UserController {
 
     @GetMapping("/dat-phong")
     public String userDatPhong() {
+        logger.debug("Entered userDatPhong() -> returning user/dat-phong");
         return "user/dat-phong";
+    }
+
+    @InitBinder("userForm")
+    public void initBinder(WebDataBinder binder) {
+        binder.setDisallowedFields("id", "password", "role", "status", "email");
+    }
+
+    private String getPrincipalEmail(Principal principal) {
+        if (principal == null) return null;
+        try {
+            // Prefer SecurityContextHolder to be robust
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null) {
+                Object p = auth.getPrincipal();
+                if (p instanceof UserDetails) {
+                    return ((UserDetails) p).getUsername();
+                }
+                // fall back to Principal.getName()
+            }
+        } catch (Exception ex) {
+            logger.debug("Failed to extract principal from SecurityContext: {}", ex.getMessage());
+        }
+        return principal.getName();
     }
 
     @GetMapping("/thong-tin")
     public String thongTin(Model model, Principal principal, RedirectAttributes redirectAttributes) {
+        logger.debug("Entered thongTin() with principal={}", principal == null ? "<null>" : principal.getName());
         if (principal == null) {
+            logger.debug("Principal is null, redirecting to /login");
+            redirectAttributes.addFlashAttribute("error", "Vui lòng đăng nhập để truy cập thông tin cá nhân");
             return "redirect:/login";
         }
-        Optional<Users> opt = userService.findByEmailIgnoreCase(principal.getName());
+        String email = getPrincipalEmail(principal);
+        Optional<Users> opt = userService.findByEmailIgnoreCase(email);
         if (opt.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Người dùng không tồn tại");
-            return "redirect:/";
+            // Previously redirected to '/', which maps to dashboard via HomeController; that's confusing.
+            redirectAttributes.addFlashAttribute("error", "Người dùng không tồn tại. Vui lòng đăng nhập lại.");
+            logger.debug("User not found for principal={}, redirecting to /login", email);
+            return "redirect:/login";
         }
         Users user = opt.get();
-        // Populate DTO
-        UserProfileDto dto = new UserProfileDto();
-        dto.setUsername(user.getUsername());
-        dto.setEmail(user.getEmail());
-        dto.setPhoneNumber(user.getPhoneNumber());
-        dto.setCitizenIdNumber(user.getCitizenIdNumber());
-        model.addAttribute("profile", dto);
+        model.addAttribute("userForm", user);
+        logger.debug("Rendering user/thong-tin for user id={}", user.getId());
         return "user/thong-tin";
     }
 
     @PostMapping("/update")
-    public String update(@Valid @ModelAttribute("profile") UserProfileDto profileDto,
+    public String update(@Valid @ModelAttribute("userForm") Users userForm,
                          BindingResult bindingResult,
                          Principal principal,
                          RedirectAttributes redirectAttributes,
@@ -84,23 +114,25 @@ public class UserController {
             return "redirect:/login";
         }
 
-        Optional<Users> opt = userService.findByEmailIgnoreCase(principal.getName());
+        String email = getPrincipalEmail(principal);
+        Optional<Users> opt = userService.findByEmailIgnoreCase(email);
         if (opt.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Người dùng không tồn tại");
-            return "redirect:/";
+            redirectAttributes.addFlashAttribute("error", "Người dùng không tồn tại. Vui lòng đăng nhập lại.");
+            logger.debug("User not found in update() for principal={}, redirecting to /login", email);
+            return "redirect:/login";
         }
 
         Users user = opt.get();
 
         // Validate input
         if (bindingResult.hasErrors()) {
-            // return form with errors; keep profile model attribute
-            model.addAttribute("profile", profileDto);
+            // return form with errors; keep userForm model attribute
+            model.addAttribute("userForm", userForm);
             return "user/thong-tin";
         }
 
         // CCCD: kiểm tra tồn tại (nếu thay đổi)
-        String newCitizen = profileDto.getCitizenIdNumber();
+        String newCitizen = userForm.getCitizenIdNumber();
         if (newCitizen != null && !newCitizen.equals(user.getCitizenIdNumber())) {
             if (userService.existsByCitizenIdNumber(newCitizen)) {
                 redirectAttributes.addFlashAttribute("error", "CCCD đã tồn tại");
@@ -110,8 +142,8 @@ public class UserController {
         }
 
         // Các trường khác cho phép cập nhật (không chạm password/role/email)
-        user.setUsername(profileDto.getUsername());
-        user.setPhoneNumber(profileDto.getPhoneNumber());
+        user.setUsername(userForm.getUsername());
+        user.setPhoneNumber(userForm.getPhoneNumber());
 
         userService.save(user);
 
@@ -119,12 +151,14 @@ public class UserController {
         Object pending = session.getAttribute("PENDING_BOOKING");
         if (pending instanceof Map) {
             try {
-                Map<String, String> payload = (Map<String, String>) pending;
+                Map<?, ?> payload = (Map<?, ?>) pending;
+                Object ngayDenObj = payload.get("ngayDen");
+                Object ngayDiObj = payload.get("ngayDi");
+                String ngayDen = ngayDenObj instanceof String ? (String) ngayDenObj : null;
+                String ngayDi = ngayDiObj instanceof String ? (String) ngayDiObj : null;
                 Booking b = new Booking();
                 // generate simple code
                 b.setCode("BK-" + System.currentTimeMillis());
-                String ngayDen = payload.get("ngayDen");
-                String ngayDi = payload.get("ngayDi");
                 if (ngayDen != null && ngayDi != null) {
                     LocalDate d1 = LocalDate.parse(ngayDen);
                     LocalDate d2 = LocalDate.parse(ngayDi);
@@ -139,59 +173,12 @@ public class UserController {
                 return "redirect:/user/bang-dieu-khien";
             } catch (Exception ex) {
                 // ignore and continue
+                logger.warn("Error while completing pending booking: {}", ex.getMessage());
             }
         }
 
         redirectAttributes.addFlashAttribute("success", "Cập nhật thông tin thành công");
         return "redirect:/user/thong-tin";
     }
-
-//    @PostMapping("/dat-phong")
-//    public String postDatPhong(@RequestParam("ngayDen") String ngayDen,
-//                               @RequestParam("ngayDi") String ngayDi,
-//                               @RequestParam(value = "loaiPhong", required = false) String loaiPhong,
-//                               @RequestParam(value = "ghiChu", required = false) String ghiChu,
-//                               Principal principal,
-//                               HttpSession session,
-//                               RedirectAttributes redirectAttributes) {
-//        if (principal == null) {
-//            return "redirect:/login";
-//        }
-//        Optional<Users> opt = userService.findByEmailIgnoreCase(principal.getName());
-//        if (opt.isEmpty()) {
-//            redirectAttributes.addFlashAttribute("error", "Người dùng không tồn tại");
-//            return "redirect:/";
-//        }
-//        Users user = opt.get();
-//        boolean phoneMissing = user.getPhoneNumber() == null || user.getPhoneNumber().trim().isEmpty();
-//        boolean citizenMissing = user.getCitizenIdNumber() == null || user.getCitizenIdNumber().trim().isEmpty();
-//
-//        if (phoneMissing || citizenMissing) {
-//            // Lưu payload tạm vào session để hoàn tất sau khi user nhập thông tin
-//            session.setAttribute("PENDING_BOOKING", Map.of(
-//                    "ngayDen", ngayDen,
-//                    "ngayDi", ngayDi,
-//                    "loaiPhong", loaiPhong == null ? "" : loaiPhong,
-//                    "ghiChu", ghiChu == null ? "" : ghiChu
-//            ));
-//            redirectAttributes.addFlashAttribute("error", "Bạn cần hoàn thành thông tin cá nhân trước khi đặt phòng.");
-//            return "redirect:/user/thong-tin";
-//        }
-//
-//        // Người dùng đã có thông tin -> tạo booking ngay
-//        Booking b = new Booking();
-//        b.setCode("BK-" + System.currentTimeMillis());
-//        LocalDate d1 = LocalDate.parse(ngayDen);
-//        LocalDate d2 = LocalDate.parse(ngayDi);
-//        b.setCheckInDate(d1.atStartOfDay());
-//        b.setCheckOutDate(d2.atStartOfDay());
-//        b.setStatus(0);
-//        b.setUser(user);
-//        // room not set (form currently does not select specific room)
-//        bookingService.save(b);
-//
-//        redirectAttributes.addFlashAttribute("success", "Đặt phòng thành công");
-//        return "redirect:/user/bang-dieu-khien";
-//    }
 
 }

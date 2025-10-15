@@ -16,4 +16,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
     boolean existsByCitizenIdNumber(String citizenIdNumber);
 
     Users findByCitizenIdNumber(String citizenIdNumber);
+
+    // phương thức
+    boolean existsByUsernameIgnoreCase(String username);
 }

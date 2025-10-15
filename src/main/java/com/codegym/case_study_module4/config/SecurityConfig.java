@@ -40,7 +40,7 @@ public class SecurityConfig {
         http
                 // Phân quyền cho từng loại request
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/login", "/logout").permitAll()
+                        .requestMatchers("/", "/login").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()
@@ -50,16 +50,20 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .permitAll()
                 )
-                // Cho phép logout
+                // Cho phép logout (POST request with CSRF token)
                 .logout(logout -> logout
                         .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
                 // Cho phép basic auth cho REST client (Postman, mobile app)
                 .httpBasic(Customizer.withDefaults())
                 // CSRF: bật cho web, tắt cho API. Không tắt CSRF cho /user/** vì form web cần token
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/admin/**", "/user/**", "/api/**")
+                        .ignoringRequestMatchers("/admin/**", "/api/**")
                 );
         return http.build();
     }
