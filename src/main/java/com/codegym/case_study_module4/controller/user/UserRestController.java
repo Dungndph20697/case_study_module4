@@ -5,6 +5,7 @@ import com.codegym.case_study_module4.model.Room;
 import com.codegym.case_study_module4.model.Users;
 import com.codegym.case_study_module4.service.IBookingService;
 import com.codegym.case_study_module4.service.IRoomService;
+import com.codegym.case_study_module4.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/user")
 public class UserRestController {
+
+    @Autowired
+    private IUserService userService;
 
     @Autowired
     private IRoomService roomService;
@@ -40,7 +44,8 @@ public class UserRestController {
     @PostMapping("/dat-phong")
     public ResponseEntity<Booking> datPhong(@RequestBody Booking booking) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Users user = (Users) authentication.getPrincipal();
+        String username = authentication.getName();
+        Users user = userService.findUsersByEmail(username);
         Long userId = user.getId();
         booking.setUser(Users.builder().id(userId).build());
         booking.setStatus(0);
@@ -51,7 +56,9 @@ public class UserRestController {
     @GetMapping("/get-bookings-user")
     public ResponseEntity<List<Booking>> getBookingsForUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Users user = (Users) authentication.getPrincipal();
+        String username = authentication.getName(); // hoặc getPrincipal().toString()
+
+        Users user = userService.findUsersByEmail(username);
         Long userId = user.getId();
         List<Booking> bookings = bookingService.findByUserId(userId);
         return ResponseEntity.ok(bookings);

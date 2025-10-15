@@ -63,7 +63,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 // CSRF: bật cho web, tắt cho API. Không tắt CSRF cho /user/** vì form web cần token
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/admin/**", "/api/**")
+                        .ignoringRequestMatchers("/admin/**", "/user/**", "/api/**")
                 );
         return http.build();
     }
