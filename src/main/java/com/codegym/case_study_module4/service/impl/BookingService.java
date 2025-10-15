@@ -57,4 +57,5 @@ public class BookingService implements IBookingService {
     public void deleteByUserId(Long userId) {
         bookingRepository.deleteByUserId(userId);
     }
+
 }
