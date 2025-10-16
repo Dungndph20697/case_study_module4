@@ -11,9 +11,38 @@
         <div class="row">
             <div class="col-md-3" th:replace="fragments/sidebar-user :: sidebar-user"></div>
             <div class="col-md-9">
-                <div class="alert alert-primary shadow-sm">
-                    <i class="bi bi-info-circle"></i> Chào mừng bạn đến với hệ thống đặt phòng khách sạn.
-                </div>
+
+                <h2 class="text-center mb-4">BẢNG GIÁ PHÒNG KHÁCH SẠN</h2>
+                <table class="table table-bordered table-hover text-center align-middle">
+                    <thead class="table-primary">
+                    <tr>
+                        <th>Loại phòng</th>
+                        <th>Giá (VNĐ)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Phòng đơn</td>
+                        <td>500.000</td>
+                    </tr>
+                    <tr>
+                        <td>Phòng đôi</td>
+                        <td>600.000</td>
+                    </tr>
+                    <tr>
+                        <td>Phòng VIP</td>
+                        <td>700.000</td>
+                    </tr>
+                    <tr>
+                        <td>Phòng tổng thống</td>
+                        <td>150.000</td>
+                    </tr>
+                    <tr>
+                        <td>Phòng thường</td>
+                        <td>500.000</td>
+                    </tr>
+                    </tbody>
+                </table>
                 <a th:href="@{/user/dat-phong}" class="btn btn-success mt-2">
                     <i class="bi bi-calendar-plus"></i> Đặt phòng ngay
                 </a>
