@@ -40,7 +40,7 @@ public class SecurityConfig {
         http
                 // Phân quyền cho từng loại request
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/login","user/form-register","user/register").permitAll()
+                        .requestMatchers("/", "/login","user/form-register","user/register","user/bang-dieu-khien").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()
